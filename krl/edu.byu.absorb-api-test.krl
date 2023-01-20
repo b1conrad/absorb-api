@@ -1,5 +1,6 @@
 ruleset edu.byu.absorb-api-test {
   meta {
+    use module io.picolabs.wrangler alias wrangler
     use module com.absorb.sdk alias sdk
     shares getToken
   }
