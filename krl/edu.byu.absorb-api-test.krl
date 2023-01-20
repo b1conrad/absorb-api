@@ -2,12 +2,15 @@ ruleset edu.byu.absorb-api-test {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module com.absorb.sdk alias absorb
-    shares getAuthenticationToken
+    shares getAuthenticationToken, getCategories
   }
   global {
     event_domain = "absorb_api_test"
     getAuthenticationToken = function(){
       ent:authenticationToken
+    }
+    getCategories = function(){
+      absorb:categories(ent:authenticationToken)
     }
   }
   rule initialize {
