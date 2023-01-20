@@ -35,4 +35,12 @@ ruleset edu.byu.absorb-api-test {
       ent:authenticationToken := token
     }
   }
+  rule temporaryTokenEntry {
+    select when absorb_api_test temporaryToken
+      token re#^(.+)$# setting(token)
+    fired {
+      ent:authenticationToken := token
+      ent:authenticationTime := time:now()
+    }
+  }
 }
