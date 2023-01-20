@@ -7,10 +7,11 @@ ruleset edu.byu.absorb-api-test {
   global {
     event_domain = "absorb_api_test"
     getAuthenticationToken = function(){
-      ent:authenticationToken
+      absorb:getToken()
     }
     getCategories = function(){
-      absorb:categories(ent:authenticationToken)
+      absorb:tokenValid() => absorb:categories()
+                           | "token needed"
     }
   }
   rule initialize {
@@ -32,18 +33,10 @@ ruleset edu.byu.absorb-api-test {
     wrangler:deleteChannel(chan.get("id"))
   }
   rule generateAuthenticationToken {
-    select when absorb_api_test tokenNeeded
-    absorb:Authenticate() setting(token)
+    select when absorb_api_test factory_reset
+             or absorb_api_test token_needed
     fired {
-      ent:authenticationToken := token
-    }
-  }
-  rule temporaryTokenEntry {
-    select when absorb_api_test temporaryToken
-      token re#^(.+)$# setting(token)
-    fired {
-      ent:authenticationToken := token
-      ent:authenticationTime := time:now()
+      raise com_absorb_sdk event "tokenNeeded"
     }
   }
 }
