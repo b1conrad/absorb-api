@@ -1,12 +1,12 @@
 ruleset edu.byu.absorb-api-test {
   meta {
     use module io.picolabs.wrangler alias wrangler
-    use module com.absorb.sdk alias sdk
-    shares getToken
+    use module com.absorb.sdk alias absorb
+    shares getAuthenticationToken
   }
   global {
     event_domain = "absorb_api_test"
-    getToken = function(){
+    getAuthenticationToken = function(){
       ent:authenticationToken
     }
   }
@@ -30,7 +30,7 @@ ruleset edu.byu.absorb-api-test {
   }
   rule generateAuthenticationToken {
     select when absorb_api_test tokenNeeded
-    sdk:getToken() setting(token)
+    absorb:Authenticate() setting(token)
     fired {
       ent:authenticationToken := token
     }
