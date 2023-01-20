@@ -20,6 +20,7 @@ ruleset com.absorb.sdk {
     categories = function(authenticationToken){
       api_url = "https://"+SubDomain+".myabsorb.com/api/Rest/v1/categories"
       the_headers = {
+        "Content-Type":"application/json",
         "x-api-key":PrivateKey,
         "Authorization":authenticationToken
       }
