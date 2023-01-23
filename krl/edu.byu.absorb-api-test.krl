@@ -7,7 +7,7 @@ ruleset edu.byu.absorb-api-test {
   global {
     event_domain = "absorb_api_test"
     getAuthenticationToken = function(){
-      absorb:getToken()
+      absorb:theToken()
     }
     getCategories = function(){
       absorb:tokenValid() => absorb:categories()
