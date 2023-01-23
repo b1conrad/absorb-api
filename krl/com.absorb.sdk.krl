@@ -24,11 +24,11 @@ ruleset com.absorb.sdk {
       && (time:add(tokenTime,{"hours":2}) > time:now())
 .klog("not yet expired")
     }
-    categories = function(authenticationToken){
+    categories = function(){
       the_headers = {
         "Content-Type":"application/json",
         "x-api-key":PrivateKey,
-        "Authorization":authenticationToken
+        "Authorization":ent:token
       }
       http:get(api_url+"categories",headers=the_headers)
     }
