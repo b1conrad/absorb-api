@@ -2,12 +2,12 @@ ruleset edu.byu.absorb-api-test {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module com.absorb.sdk alias absorb
-    shares getAuthenticationToken, getCategories
+    shares tokenValid, getCategories
   }
   global {
     event_domain = "absorb_api_test"
-    getAuthenticationToken = function(){
-      absorb:theToken()
+    tokenValid = function(){
+      absorb:tokenValid()
     }
     getCategories = function(){
       absorb:tokenValid() => absorb:categories()
@@ -33,8 +33,7 @@ ruleset edu.byu.absorb-api-test {
     wrangler:deleteChannel(chan.get("id"))
   }
   rule generateAuthenticationToken {
-    select when absorb_api_test factory_reset
-             or absorb_api_test token_needed
+    select when absorb_api_test token_needed
     fired {
       raise com_absorb_sdk event "tokenNeeded"
     }
