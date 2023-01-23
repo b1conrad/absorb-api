@@ -16,7 +16,12 @@ ruleset com.absorb.sdk {
     PrivateKey = meta:rulesetConfig{"PrivateKey"}
     api_url = "https://"+SubDomain+".myabsorb.com/api/Rest/v1/"
     tokenValid = function(){
-      ent:token && ent:valid && time:add(ent:valid,{"hours":2}) < time:now()
+      ent:token
+.klog("theToken")
+      && ent:valid
+.klog("timestamp")
+      && (time:add(ent:valid,{"hours":2}) < time:now())
+.klog("not yet expired")
     }
     categories = function(authenticationToken){
       the_headers = {
