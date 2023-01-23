@@ -30,6 +30,7 @@ ruleset com.absorb.sdk {
         "x-api-key":PrivateKey,
         "Authorization":ent:token
       }
+.klog("headers")
       http:get(api_url+"categories",headers=the_headers)
     }
   }
