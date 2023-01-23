@@ -1,7 +1,7 @@
 ruleset com.absorb.sdk {
   meta {
     provides tokenValid, categories
-    shares latestResponse, theToken
+    shares latestResponse, theToken, tokenValid
   }
   global {
     latestResponse = function(){
