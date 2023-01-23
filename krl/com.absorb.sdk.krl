@@ -28,7 +28,7 @@ ruleset com.absorb.sdk {
       the_headers = {
         "Content-Type":"application/json",
         "x-api-key":PrivateKey,
-        "Authorization":"api_key: "+authenticationToken
+        "Authorization":authenticationToken
       }
       http:get(api_url+"categories",headers=the_headers)
     }
