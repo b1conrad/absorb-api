@@ -8,7 +8,7 @@ ruleset com.absorb.sdk {
       ent:latestResponse
     }
     theToken = function(){
-      ent:token
+      ent:token.decode()
     }
     SubDomain = meta:rulesetConfig{"SubDomain"}
     Username = meta:rulesetConfig{"Username"}
@@ -17,7 +17,7 @@ ruleset com.absorb.sdk {
     api_url = "https://"+SubDomain+".myabsorb.com/api/Rest/v1/"
     tokenValid = function(){
       tokenTime = ent:valid
-      ent:token
+      ent:token.decode()
 .klog("theToken")
       && tokenTime
 .klog("timestamp")
@@ -28,7 +28,7 @@ ruleset com.absorb.sdk {
       the_headers = {
         "Content-Type":"application/json",
         "x-api-key":PrivateKey,
-        "Authorization":ent:token
+        "Authorization":ent:token.decode()
       }
 .klog("headers")
       http:get(api_url+"categories",headers=the_headers)
