@@ -12,7 +12,7 @@ we followed these instructions:
 
 This is done at the BYU Tyk Credential Manager, https://tcm.byu.edu/
 (a Mendix application). Once logged in, we clicked the "Create a New Client" button
-and were presented with a dialog box.
+and were presented with a dialog box. (see NewOAuthClient.png in this same folder)
 
 The client ID is pre-populated (it is an opaque identifier (so no dependence on the App Name)).
 We provided the App Name "bc-absorb-real-time-from-hr" (it just has to be something that you'll recognize later).
