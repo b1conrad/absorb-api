@@ -58,8 +58,8 @@ Note that it is a "bearer" token.
 
 5. subscribe to any events you care about.
 
-In our case, that is this one event (described hierarchically)
+In our case, that is [this one event](https://developer-old.byu.edu/event/hired-hrpersonalaction) (described hierarchically)
 - byu.edu
-- HR_Personal_Actions
-- Hire
+    - HR_Personal_Actions
+        - Hire
   
