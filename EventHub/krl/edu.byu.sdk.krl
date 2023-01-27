@@ -1,6 +1,6 @@
 ruleset edu.byu.sdk {
   meta {
-    provides tokenValid
+    provides tokenValid, subscriptions 
     shares latestResponse, theToken, tokenValid
   }
   global {
@@ -8,27 +8,28 @@ ruleset edu.byu.sdk {
       ent:latestResponse
     }
     theToken = function(){
-      ent:token
+      ent:token{"access_token"}
     }
     ClientID = meta:rulesetConfig{"ClientID"}
     ClientSecret = meta:rulesetConfig{"ClientSecret"}
     api_url = "https://api.byu.edu/"
     tokenValid = function(){
       tokenTime = ent:valid
-      ent:token
+      ent:token{"access_token"}
 .klog("theToken")
       && tokenTime
 .klog("timestamp")
       && (time:add(tokenTime,{"hours":2}) > time:now())
 .klog("not yet expired")
     }
-    categories = function(){
+    subscriptions = function(){
+      url = api_url + "domains/eventhub/v2/subscriptions"
       the_headers = {
         "Content-Type":"application/json",
-        "Authorization":ent:token
+        "Authorization":"Bearer "+ent:token{"access_token"}
       }
 .klog("headers")
-      http:get(api_url+"categories",headers=the_headers)
+      http:get(url,headers=the_headers)
     }
   }
   rule generateAuthenticationToken {
