@@ -35,8 +35,8 @@ ruleset edu.byu.sdk {
     select when edu_byu_sdk tokenNeeded
     pre {
       creds = {
-        "ClientID":ClientID,
-        "ClientSecret":ClientSecret,
+        "username":ClientID,
+        "password":ClientSecret,
       }
       data = {"grant_type":"client_credentials"}
     }
