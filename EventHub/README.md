@@ -61,5 +61,5 @@ Note that it is a "bearer" token.
 In our case, that is [this one event](https://developer-old.byu.edu/event/hired-hrpersonalaction) (described hierarchically)
 - byu.edu
     - HR_Personal_Actions
-        - Hire
+        - Hired
   
