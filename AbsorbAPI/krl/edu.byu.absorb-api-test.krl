@@ -2,7 +2,7 @@ ruleset edu.byu.absorb-api-test {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module com.absorb.sdk alias absorb
-    shares tokenValid, getCategories
+    shares tokenValid, getCategories, getDepartments
   }
   global {
     event_domain = "absorb_api_test"
@@ -11,6 +11,10 @@ ruleset edu.byu.absorb-api-test {
     }
     getCategories = function(){
       absorb:tokenValid() => absorb:categories()
+                           | "token needed"
+    }
+    getDepartments = function(id){
+      absorb:tokenValid() => absorb:departments(id)
                            | "token needed"
     }
   }
