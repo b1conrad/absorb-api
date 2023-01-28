@@ -13,7 +13,7 @@ ruleset edu.byu.hr_hired {
     }
   }
   rule handleSomeEvents {
-    select when allowedu_byu_hr_hired events_in_queue
+    select when edu_byu_hr_hired events_in_queue
     foreach eh_events(2,false){["events","event"]} setting(event)
     pre {
       header = event{"event_header"}
