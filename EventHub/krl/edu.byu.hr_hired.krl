@@ -9,7 +9,7 @@ ruleset edu.byu.hr_hired {
       sdk:subscriptions()
     }
     eh_events = function(limit,ack){
-      sdk:events()
+      sdk:events(limit,ack.decode())
     }
   }
 }
