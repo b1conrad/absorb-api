@@ -12,4 +12,20 @@ ruleset edu.byu.hr_hired {
       sdk:events(limit,ack.decode())
     }
   }
+  rule handleSomeEvents {
+    select when allowedu_byu_hr_hired events_in_queue
+    foreach eh_events(2,false){["events","event"]} setting(event)
+    pre {
+      header = event{"event_header"}
+.klog("header")
+      domain = header{"domain"}
+.klog("domain")
+      entity = header{"entity"}
+.klog("entity")
+      event_type = header{"event_type"}
+.klog("event_type")
+      dept_id = event{["filters","filter","filter_value"]}
+.klog("dept_id")
+    }
+  }
 }
