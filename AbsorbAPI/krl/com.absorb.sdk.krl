@@ -1,6 +1,6 @@
 ruleset com.absorb.sdk {
   meta {
-    provides tokenValid, categories
+    provides tokenValid, categories, departments
     shares latestResponse, theToken, tokenValid
   }
   global {
@@ -24,14 +24,19 @@ ruleset com.absorb.sdk {
       && (time:add(tokenTime,{"hours":2}) > time:now())
 .klog("not yet expired")
     }
+    v1_headers = {
+      "Content-Type":"application/json",
+      "x-api-key":PrivateKey,
+      "Authorization":ent:token
+    }
     categories = function(){
-      the_headers = {
-        "Content-Type":"application/json",
-        "x-api-key":PrivateKey,
-        "Authorization":ent:token
-      }
-.klog("headers")
-      http:get(api_url+"categories",headers=the_headers)
+      http:get(api_url+"categories",headers=v1_headers)
+    }
+    departments = function(id){
+      url = api_url+"departments?ExternalId="+id
+      response = http:get(url,headers=v1_headers)
+      code = response{"status_code"}
+      code == 200 => response{"content"}.decode() | null
     }
   }
   rule generateAuthenticationToken {
