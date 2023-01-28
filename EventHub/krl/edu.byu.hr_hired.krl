@@ -19,17 +19,15 @@ ruleset edu.byu.hr_hired {
     pre {
       absorb = rel:established().head()
       header = event{"event_header"}
-.klog("header")
       domain = header{"domain"}
-.klog("domain")
       entity = header{"entity"}
-.klog("entity")
       event_type = header{"event_type"}
-.klog("event_type")
       dept_id = event{["filters","filter","filter_value"]}
 .klog("dept_id")
       eci = absorb{"Tx"}
 .klog("eci")
+      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
+.klog("dept")
     }
   }
 }
