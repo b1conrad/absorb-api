@@ -10,18 +10,17 @@ ruleset edu.byu.hr_hired {
       sdk:subscriptions()
     }
     eh_events = function(limit,ack){
-what = limit.klog("limit")
-answer =
-      sdk:events(limit,ack.decode())
+      answer = sdk:events(limit,ack.decode()){["events","event"]}
 .klog("answer")
-which = answer.length().klog("how many")
-answer
+      answer.typeof() == "Map" => [answer] |
+      answer.typeof() == "Array" => answer |
+      null
     }
   }
   rule handleSomeEvents {
     select when edu_byu_hr_hired events_in_queue
       n re#^(\d+)$# setting(n)
-    foreach eh_events(n,false){["events","event"]} setting(event)
+    foreach eh_events(n||1,false) setting(event)
     pre {
       absorb = rel:established().head()
       header = event{"event_header"}
