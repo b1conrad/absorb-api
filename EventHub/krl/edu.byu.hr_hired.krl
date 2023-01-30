@@ -15,7 +15,8 @@ ruleset edu.byu.hr_hired {
   }
   rule handleSomeEvents {
     select when edu_byu_hr_hired events_in_queue
-    foreach eh_events(2,false){["events","event"]} setting(event)
+      n re#^(\d+)$# setting(n)
+    foreach eh_events(n,false){["events","event"]} setting(event)
     pre {
       absorb = rel:established().head()
       header = event{"event_header"}
