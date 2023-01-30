@@ -11,9 +11,9 @@ ruleset edu.byu.hr_hired {
     }
     eh_events = function(limit,ack){
       answer = sdk:events(limit,ack.decode()){["events","event"]}
-.klog("answer")
-      answer.typeof() == "Map" => [answer] |
-      answer.typeof() == "Array" => answer |
+      ans_type = answer.typeof()
+      ans_type == "Map" => [answer] |
+      ans_type == "Array" => answer |
       null
     }
   }
@@ -22,16 +22,17 @@ ruleset edu.byu.hr_hired {
     foreach eh_events(event:attr("n")||1,false) setting(event)
     pre {
       absorb = rel:established().head()
-      header = event{"event_header"}
-      domain = header{"domain"}
-      entity = header{"entity"}
-      event_type = header{"event_type"}
-      dept_id = event{["filters","filter","filter_value"]}
-.klog("dept_id")
       eci = absorb{"Tx"}
-.klog("eci")
+      dept_id = event{["filters","filter","filter_value"]}
       dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
 .klog("dept")
+      body = event{"event_body"}
+      byu_id = body{"byu_id"}
+.klog("byu_id")
+      net_id = body{"net_id"}
+.klog("net_id")
+      eff_dt = body{"effective_date"}
+.klog("eff_dt")
     }
   }
 }
