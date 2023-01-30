@@ -10,7 +10,12 @@ ruleset edu.byu.hr_hired {
       sdk:subscriptions()
     }
     eh_events = function(limit,ack){
+what = limit.klog("limit")
+answer =
       sdk:events(limit,ack.decode())
+.klog("answer")
+which = answer.length().klog("how many")
+answer
     }
   }
   rule handleSomeEvents {
