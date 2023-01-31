@@ -41,7 +41,7 @@ ruleset edu.byu.hr_hired {
 <th>net_id</th>
 <th>eff_dt</th>
 </tr>
-#{ent:hr_events.map(function(e,k){
+#{ent:hr_events.reverse().map(function(e,k){
   h = e{"event_header"}
   b = e{"event_body"}
 <<<tr>
