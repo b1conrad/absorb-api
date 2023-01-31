@@ -1,6 +1,6 @@
 ruleset edu.byu.sdk {
   meta {
-    provides tokenValid, subscriptions, events
+    provides tokenValid, subscriptions, events, acknowledge
     shares latestResponse, theToken, tokenValid
   }
   global {
@@ -40,6 +40,11 @@ ruleset edu.byu.sdk {
       response = http:get(url,headers=hdrs(),qs=args)
       status = response{"status_code"}
       status == 200 => response{"content"}.decode() | status
+    }
+    acknowledge = defaction(event_id){
+      url = api_url + "domains/eventhub/v2/events/" + event_id
+      http:put(url) setting(response)
+      return response
     }
   }
   rule generateAuthenticationToken {
