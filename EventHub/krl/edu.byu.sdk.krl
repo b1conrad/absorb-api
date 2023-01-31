@@ -43,7 +43,7 @@ ruleset edu.byu.sdk {
     }
     acknowledge = defaction(event_id){
       url = api_url + "domains/eventhub/v2/events/" + event_id
-      http:put(url) setting(response)
+      http:put(url,headers=hdrs()) setting(response)
       return response
     }
   }
