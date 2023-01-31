@@ -30,7 +30,7 @@ ruleset edu.byu.hr_hired {
       parts.filter(function(v,i){i<2}).join(" ")
     }
     index = function(){
-      del_base = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/ack?id=>>
+      del_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/ack?id=>>
       html:header("Hired events")
       + <<<h1>Hired events</h1>
 <table>
@@ -81,6 +81,17 @@ ruleset edu.byu.hr_hired {
   }
   rule acknowledgeEvents {
     select when edu_byu_hr_hired ack
+    sdk:acknowledge(event:attr("id")) setting(response)
+    fired { // todo prune ent:hr_events
+      raise edu_byu_hr_hired event "events_acknowledged" attributes response
+    }
+  }
+  rule redirectBack {
+    select when edu_byu_hr_hired ack
+    pre {
+      referrer = event:attr("_headers").get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
