@@ -30,6 +30,7 @@ ruleset edu.byu.hr_hired {
       parts.filter(function(v,i){i<2}).join(" ")
     }
     index = function(){
+      last = ent:hr_events.keys().length()
       del_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/ack?id=>>
       html:header("Hired events")
       + <<<h1>Hired events</h1>
@@ -49,7 +50,7 @@ ruleset edu.byu.hr_hired {
   id = h{"event_id"}
 <<<tr>
 <td>#{i+1}</td>
-<td title="#{id}"><a><a href="#{del_base+id}">del</a></td>
+<td title="#{id}"><a><a href="#{del_base+id}">del #{i+1}-#{last}</a></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
 <td>#{b{"byu_id"}}</td>
