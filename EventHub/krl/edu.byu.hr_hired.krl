@@ -34,6 +34,7 @@ ruleset edu.byu.hr_hired {
       + <<<h1>Hired events</h1>
 <table>
 <tr>
+<th>№</th>
 <th>event_id</th>
 <th>event_dt</th>
 <th>dept</th>
@@ -41,10 +42,11 @@ ruleset edu.byu.hr_hired {
 <th>net_id</th>
 <th>eff_dt</th>
 </tr>
-#{ent:hr_events.values().reverse().map(function(e){
+#{ent:hr_events.values().reverse().map(function(e,i){
   h = e{"event_header"}
   b = e{"event_body"}
 <<<tr>
+<td>#{i+1}</td>
 <td><span title="#{h{"event_id"}}">del</span></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
