@@ -30,6 +30,7 @@ ruleset edu.byu.hr_hired {
       parts.filter(function(v,i){i<2}).join(" ")
     }
     index = function(){
+      del_base = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/ack?id=>>
       html:header("Hired events")
       + <<<h1>Hired events</h1>
 <table>
@@ -45,9 +46,10 @@ ruleset edu.byu.hr_hired {
 #{ent:hr_events.values().reverse().map(function(e,i){
   h = e{"event_header"}
   b = e{"event_body"}
+  id = h{"event_id"}
 <<<tr>
 <td>#{i+1}</td>
-<td><span title="#{h{"event_id"}}">del</span></td>
+<td><a title="#{id}"><a href="#{del_base+id}">del</a></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
 <td>#{b{"byu_id"}}</td>
@@ -76,6 +78,9 @@ ruleset edu.byu.hr_hired {
     fired {
       ent:hr_events{event_id} := event
     }
+  }
+  rule acknowledgeEvents {
+    select when edu_byu_hr_hired ack
   }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
