@@ -18,6 +18,17 @@ ruleset edu.byu.hr_hired {
       ans_type == "Array" => answer |
       null
     }
+    makeMT = function(ts){
+      MST = time:add(ts,{"hours": -7});
+      MDT = time:add(ts,{"hours": -6});
+      MDT > "2022-11-06T02" => MST |
+      MST > "2022-03-13T02" => MDT |
+                               MST
+    }
+    ts_format = function(ts){
+      parts = ts.split(re#[T.]#)
+      parts.filter(function(v,i){i<2}).join(" ")
+    }
     index = function(){
       html:header("Hired events")
       + <<<h1>Hired events</h1>
@@ -34,8 +45,8 @@ ruleset edu.byu.hr_hired {
   h = e{"event_header"}
   b = e{"event_body"}
 <<<tr>
-<td>#{k}</td>
-<td>#{h{"event_dt"}}</td>
+<td><span title="#{k}">del</span></td>
+<td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
 <td>#{b{"byu_id"}}</td>
 <td>#{b{"net_id"}}</td>
