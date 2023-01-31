@@ -1,11 +1,13 @@
 ruleset edu.byu.hr_hired {
   meta {
+    use module html
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events
+    shares eh_subscriptions, eh_events, index
   }
   global {
+    rs_event_domain = "edu_byu_hr_hired"
     eh_subscriptions = function(){
       sdk:subscriptions()
     }
@@ -15,6 +17,10 @@ ruleset edu.byu.hr_hired {
       ans_type == "Map" => [answer] |
       ans_type == "Array" => answer |
       null
+    }
+    index = function(){
+      html:header("Hired events")
+      + html:footer()
     }
   }
   rule handleSomeEvents {
@@ -34,5 +40,18 @@ ruleset edu.byu.hr_hired {
       eff_dt = body{"effective_date"}
 .klog("eff_dt")
     }
+  }
+  rule initialize {
+    select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
+    pre {
+      tags = [rs_event_domain,"ui"]
+      chan = wrangler:channels(tags).head()
+    }
+    if chan.isnull() then
+      wrangler:createChannel(
+        tags,
+        {"allow":[{"domain":rs_event_domain,"name":"*"}],"deny":[]},
+        {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
+      )
   }
 }
