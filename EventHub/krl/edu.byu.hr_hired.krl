@@ -21,7 +21,27 @@ ruleset edu.byu.hr_hired {
     index = function(){
       html:header("Hired events")
       + <<<h1>Hired events</h1>
-<pre>#{ent:hr_events.encode()}</pre>
+<table>
+<tr>
+<th>event_id</th>
+<th>event_dt</th>
+<th>dept</th>
+<th>byu_id</th>
+<th>net_id</th>
+<th>eff_dt</th>
+</tr>
+#{ent:hr_events.map(function(e,k){
+  h = e{"event_header"}
+  b = e{"event_body"}
+<<<tr>
+<td>#{k}</td>
+<td>#{h{"event_dt"}}</td>
+<td>#{e{["filters","filter","filter_value"]}}</td>
+<td>#{b{"byu_id"}}</td>
+<td>#{b{"net_id"}}</td>
+<td>#{b{"effective_date"}}</td>
+</tr>
+>>}).values().join("")}</table>
 >>
       + html:footer()
     }
