@@ -49,7 +49,7 @@ ruleset edu.byu.hr_hired {
   id = h{"event_id"}
 <<<tr>
 <td>#{i+1}</td>
-<td><a title="#{id}"><a href="#{del_base+id}">del</a></td>
+<td title="#{id}"><a><a href="#{del_base+id}">del</a></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
 <td>#{b{"byu_id"}}</td>
