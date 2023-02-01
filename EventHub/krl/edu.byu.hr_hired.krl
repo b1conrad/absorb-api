@@ -4,7 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export
+    shares eh_subscriptions, eh_events, index, export, person
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -32,6 +32,7 @@ ruleset edu.byu.hr_hired {
     index = function(){
       last = ent:hr_events.keys().length()
       del_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/ack?id=>>
+      person_url = "person.html?id="
       html:header("Hired events")
       + <<<h1>Hired events</h1>
 <table>
@@ -48,17 +49,24 @@ ruleset edu.byu.hr_hired {
   h = e{"event_header"}
   b = e{"event_body"}
   id = h{"event_id"}
+  pid = b{"byu_id"}
 <<<tr>
 <td>#{i+1}</td>
 <td title="#{id}"><a><a href="#{del_base+id}">del #{i+1}-#{last}</a></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
-<td>#{b{"byu_id"}}</td>
+<td><a href="#{person_url+pid}" target="_blank">#{pid}</a></td>
 <td>#{b{"net_id"}}</td>
 <td>#{b{"effective_date"}}</td>
 </tr>
 >>}).values().join("")}</table>
 <a href="export.txt" target="_blank">export</a>
+>>
+      + html:footer()
+    }
+    person = function(id){
+      html:header("Person "+id)
+      + <<<h1>Person #{id}</h1>
 >>
       + html:footer()
     }
