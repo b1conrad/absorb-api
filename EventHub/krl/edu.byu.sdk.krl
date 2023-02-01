@@ -1,7 +1,7 @@
 ruleset edu.byu.sdk {
   meta {
-    provides tokenValid, subscriptions, events, acknowledge
-    shares latestResponse, theToken, tokenValid
+    provides tokenValid, subscriptions, events, acknowledge, persons
+    shares latestResponse, theToken, tokenValid, persons
   }
   global {
     latestResponse = function(){
@@ -45,6 +45,10 @@ ruleset edu.byu.sdk {
       url = api_url + "domains/eventhub/v2/events/" + event_id
       http:put(url,headers=hdrs()) setting(response)
       return response
+    }
+    persons = function(id){
+      url = api_url + "byuapi/persons/" + id
+      http:get(url,headers=hdrs())
     }
   }
   rule generateAuthenticationToken {
