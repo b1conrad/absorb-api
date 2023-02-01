@@ -67,7 +67,7 @@ ruleset edu.byu.hr_hired {
         h = e{"event_header"}
         b = e{"event_body"}
         id = h{"event_id"}
-        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}}#{b{"net_id"}},#{b{"effective_date"}}>>
+        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}},#{b{"net_id"}},#{b{"effective_date"}}>>
       }
       lines = ent:hr_events.values().map(one_line).join(chr(10))
       th + chr(10) + lines
