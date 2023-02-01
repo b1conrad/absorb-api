@@ -39,7 +39,7 @@ ruleset edu.byu.hr_hired {
 <th>№</th>
 <th>event_id</th>
 <th>event_dt</th>
-<th>dept</th>
+<th>dept_id</th>
 <th>byu_id</th>
 <th>net_id</th>
 <th>eff_dt</th>
@@ -63,7 +63,7 @@ ruleset edu.byu.hr_hired {
       + html:footer()
     }
     export = function(){
-      th = "event_id,event_dt,dept,byu_id,net_id,eff_dt"
+      th = "event_id,event_dt,dept_id,byu_id,net_id,eff_dt"
       one_line = function(e,i){
         h = e{"event_header"}
         b = e{"event_body"}
@@ -74,7 +74,7 @@ ruleset edu.byu.hr_hired {
       th + chr(10) + lines
     }
   }
-  rule handleSomeEvents {
+  rule fetchSomeEvents {
     select when edu_byu_hr_hired events_in_queue
     foreach eh_events(event:attr("n")||1,false) setting(event)
     pre {
@@ -90,6 +90,7 @@ ruleset edu.byu.hr_hired {
     }
     fired {
       ent:hr_events{event_id} := event
+      raise edu_byu_hr_hired event "hired_event_fetched" attributes {"event":event}
     }
   }
   rule reactToWebhook {
@@ -100,6 +101,7 @@ ruleset edu.byu.hr_hired {
     }
     fired {
       ent:hr_events{event_id} := event
+      raise edu_byu_hr_hired event "hired_event_received" attributes event:attrs
     }
   }
   rule acknowledgeEvents {
