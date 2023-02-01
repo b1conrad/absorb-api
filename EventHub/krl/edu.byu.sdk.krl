@@ -48,7 +48,9 @@ ruleset edu.byu.sdk {
     }
     persons = function(id){
       url = api_url + "byuapi/persons/" + id
-      http:get(url,headers=hdrs()
+      http:get(url
+.klog("url")
+,headers=hdrs()
 .klog("hdrs")
 )
     }
