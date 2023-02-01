@@ -92,6 +92,16 @@ ruleset edu.byu.hr_hired {
       ent:hr_events{event_id} := event
     }
   }
+  rule reactToWebhook {
+    select when HR_Personal_Action Hired
+    pre {
+      event = event:attr("event")
+      event_id = event{["event_header","event_id"]}
+    }
+    fired {
+      ent:hr_events{event_id} := event
+    }
+  }
   rule acknowledgeEvents {
     select when edu_byu_hr_hired ack
     sdk:acknowledge(event:attr("id")) setting(response)
