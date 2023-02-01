@@ -4,7 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index
+    shares eh_subscriptions, eh_events, index, export
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -60,6 +60,17 @@ ruleset edu.byu.hr_hired {
 >>}).values().join("")}</table>
 >>
       + html:footer()
+    }
+    export = function(){
+      th = "event_id,event_dt,dept,byu_id,net_id,eff_dt"
+      one_line = function(e,i){
+        h = e{"event_header"}
+        b = e{"event_body"}
+        id = h{"event_id"}
+        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}}#{b{"net_id"}},#{b{"effective_date"}}>>
+      }
+      lines = ent:hr_events.values().map(one_line).join(chr(10))
+      th + lines
     }
   }
   rule handleSomeEvents {
