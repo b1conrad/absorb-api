@@ -58,6 +58,7 @@ ruleset edu.byu.hr_hired {
 <td>#{b{"effective_date"}}</td>
 </tr>
 >>}).values().join("")}</table>
+<a href="export.txt">export</a>
 >>
       + html:footer()
     }
