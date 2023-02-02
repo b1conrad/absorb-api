@@ -5,6 +5,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
     shares eh_subscriptions, eh_events, index, export, person
+, getUserAccount
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -32,7 +33,6 @@ ruleset edu.byu.hr_hired {
     index = function(){
       last = ent:hr_events.keys().length()
       del_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/ack?id=>>
-      person_url = "person.html?id="
       html:header("Hired events")
       + <<<h1>Hired events</h1>
 <table>
@@ -50,7 +50,7 @@ ruleset edu.byu.hr_hired {
   b = e{"event_body"}
   id = h{"event_id"}
   pid = b{"byu_id"}
-  url = person_url+pid+"&event_id="+id
+  url = "person.html?id="+pid+"&event_id="+id
 <<<tr>
 <td>#{i+1}</td>
 <td title="#{id}"><a><a href="#{del_base+id}">del #{i+1}-#{last}</a></td>
@@ -64,6 +64,29 @@ ruleset edu.byu.hr_hired {
 <a href="export.txt" target="_blank">export</a>
 >>
       + html:footer()
+    }
+    getUserAccount = function(event_id){
+      e = ent:hr_events{event_id}
+      dept_id = e{["filters","filter","filter_value"]}
+      id = e{["event_body","byu_id"]}
+      response = sdk:persons(id)
+      s_code = response{"status_code"}
+      content = s_code == 200 => response{"content"} | s_code
+      basic = content.decode(){"basic"}
+      obj = {
+        "id": "",
+        "username": basic{["net_id","value"]},
+        "departmentId": "@" + dept_id,
+        "firstName": basic{["preferred_first_name","value"]},
+        "lastName": basic{["preferred_surname","value"]},
+        "gender": basic{["sex","value"]},
+        "activeStatus":0,
+        "isLearner":true,
+        "isInstructor":false,
+        "isAdmin":false,
+        "hasUsername":true,
+      }
+      obj
     }
     person = function(id,event_id){
       e = ent:hr_events{event_id}
