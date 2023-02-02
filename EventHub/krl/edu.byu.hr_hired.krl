@@ -66,14 +66,14 @@ ruleset edu.byu.hr_hired {
       + html:footer()
     }
     person = function(id,event_id){
-      dept_id = ent:hr_events{["event_id","filters","filter","filter_value"]}
+      e = ent:hr_events{"event_id"}
+      dept_id = e{["filters","filter","filter_value"]}
       response = sdk:persons(id)
       s_code = response{"status_code"}
       content = s_code == 200 => response{"content"} | s_code
       basic = content.decode(){"basic"}
       html:header("Person "+id)
       + <<<h1>Person #{id}</h1>
-<pre>#{content}</pre>
 <table>
 <tr><th>id</th><td>&nbsp;</td></tr>
 <tr><th>username</th><td>#{basic{["net_id","value"]}}</td></tr>
