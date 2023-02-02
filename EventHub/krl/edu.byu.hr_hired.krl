@@ -74,11 +74,11 @@ ruleset edu.byu.hr_hired {
 <pre>#{content}</pre>
 <table>
 <tr><th>id</th><td>&nbxp;</td></tr>
-<tr><th>username</th><td>#{basic{"net_id"}}</td></tr>
+<tr><th>username</th><td>#{basic{["net_id","value"]}}</td></tr>
 <tr><th>departmentId</th><td>TBD</td></tr>
-<tr><th>firstName</th><td>#{basic{"preferred_first_name"}}</td></tr>
-<tr><th>lastName</th><td>#{basic{"preferred_surname"}}</td></tr>
-<tr><th>gender</th><td>#{basic{"sex"}}</td></tr>
+<tr><th>firstName</th><td>#{basic{["preferred_first_name","value"]}}</td></tr>
+<tr><th>lastName</th><td>#{basic{["preferred_surname","value"]}}</td></tr>
+<tr><th>gender</th><td>#{basic{["sex","value"]}}</td></tr>
 <tr><th>activeStatus</th><td>0</td></tr>
 <tr><th>isLearner</th><td>true</td></tr>
 <tr><th>isInstructor</th><td>false</td></tr>
