@@ -65,8 +65,12 @@ ruleset edu.byu.hr_hired {
       + html:footer()
     }
     person = function(id){
+      response = sdk:persons(id)
+      s_code = response{"status_code"}
+      content = s_code == 200 => response{"content"} | s_code
       html:header("Person "+id)
       + <<<h1>Person #{id}</h1>
+<pre>#{content}</pre>
 >>
       + html:footer()
     }
