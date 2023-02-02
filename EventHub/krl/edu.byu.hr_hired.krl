@@ -68,9 +68,23 @@ ruleset edu.byu.hr_hired {
       response = sdk:persons(id)
       s_code = response{"status_code"}
       content = s_code == 200 => response{"content"} | s_code
+      basic = content.decode(){"basic"}
       html:header("Person "+id)
       + <<<h1>Person #{id}</h1>
 <pre>#{content}</pre>
+<table>
+<tr><th>id</th><td>&nbxp;</td></tr>
+<tr><th>username</th><td>#{basic{"net_id"}}</td></tr>
+<tr><th>departmentId</th><td>TBD</td></tr>
+<tr><th>firstName</th><td>#{basic{"preferred_first_name"}}</td></tr>
+<tr><th>lastName</th><td>#{basic{"preferred_surname"}}</td></tr>
+<tr><th>gender</th><td>#{basic{"sex"}}</td></tr>
+<tr><th>activeStatus</th><td>0</td></tr>
+<tr><th>isLearner</th><td>true</td></tr>
+<tr><th>isInstructor</th><td>false</td></tr>
+<tr><th>isAdmin</th><td>false</td></tr>
+<tr><th>hasUsername</th><td>true</td></tr>
+</table>
 >>
       + html:footer()
     }
