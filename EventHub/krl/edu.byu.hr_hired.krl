@@ -66,7 +66,7 @@ ruleset edu.byu.hr_hired {
       + html:footer()
     }
     person = function(id,event_id){
-      e = ent:hr_events{"event_id".klog("event_id")}.klog("event")
+      e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
       response = sdk:persons(id)
       s_code = response{"status_code"}
