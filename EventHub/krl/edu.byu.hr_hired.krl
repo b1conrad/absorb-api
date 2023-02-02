@@ -50,12 +50,13 @@ ruleset edu.byu.hr_hired {
   b = e{"event_body"}
   id = h{"event_id"}
   pid = b{"byu_id"}
+  url = person_url+pid+"&event_id="+id
 <<<tr>
 <td>#{i+1}</td>
 <td title="#{id}"><a><a href="#{del_base+id}">del #{i+1}-#{last}</a></td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
-<td><a href="#{person_url+pid}" target="_blank">#{pid}</a></td>
+<td><a href="#{url}" target="_blank">#{pid}</a></td>
 <td>#{b{"net_id"}}</td>
 <td>#{b{"effective_date"}}</td>
 </tr>
@@ -64,7 +65,8 @@ ruleset edu.byu.hr_hired {
 >>
       + html:footer()
     }
-    person = function(id){
+    person = function(id,event_id){
+      dept_id = ent:hr_events{["event_id","filters","filter","filter_value"]}
       response = sdk:persons(id)
       s_code = response{"status_code"}
       content = s_code == 200 => response{"content"} | s_code
@@ -73,9 +75,9 @@ ruleset edu.byu.hr_hired {
       + <<<h1>Person #{id}</h1>
 <pre>#{content}</pre>
 <table>
-<tr><th>id</th><td>&nbxp;</td></tr>
+<tr><th>id</th><td>&nbsp;</td></tr>
 <tr><th>username</th><td>#{basic{["net_id","value"]}}</td></tr>
-<tr><th>departmentId</th><td>TBD</td></tr>
+<tr><th>departmentId</th><td>@#{dept_id}</td></tr>
 <tr><th>firstName</th><td>#{basic{["preferred_first_name","value"]}}</td></tr>
 <tr><th>lastName</th><td>#{basic{["preferred_surname","value"]}}</td></tr>
 <tr><th>gender</th><td>#{basic{["sex","value"]}}</td></tr>
