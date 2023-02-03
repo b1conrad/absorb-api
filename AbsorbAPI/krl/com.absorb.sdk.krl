@@ -58,4 +58,34 @@ ruleset com.absorb.sdk {
       ent:valid := time:now()
     }
   }
+  rule createAccountForNewHire {
+    select when com_absorb_sdk new_hire
+      username re#^([a-z][a-z0-9]{1-7})$#
+      departmentId re#^@(\d{4})$#
+      firstName re#(.+)#
+      lastName re#(.+)#
+      gender re#(^@([FM])$#
+      setting(username,dept_id,firstName,lastName,sex)
+    pre {
+      gender = sex=="F" => 2 | sex=="M" => 1 | 0
+      department = departments(dept_id)
+      departmentId = department => department{"id"} | null
+      body = {
+        "id": "",
+        "username": username,
+        "password": "ChangeMe",
+        "departmentId": departmentId,
+        "firstName": firstName,
+        "lastName": lastName,
+        "externalId": event:attr("externalId"),
+        "gender": gender,
+        "activeStatus": 0,
+        "isLearner": true,
+        "isInstructor": false,
+        "isAdmin": false,
+        "hasUsername": true,
+      }
+.klog("body")
+    }
+  }
 }
