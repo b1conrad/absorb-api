@@ -64,8 +64,9 @@ ruleset com.absorb.sdk {
       departmentId re#^@(\d{4})$#
       firstName re#(.+)#
       lastName re#(.+)#
-      gender re#^@([FM])$#
-      setting(username,dept_id,firstName,lastName,sex)
+      externalId re#^(\d{9})$#
+      gender re#^([FM])$#
+      setting(username,dept_id,firstName,lastName,externalId,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
       department = departments(dept_id)
@@ -77,7 +78,7 @@ ruleset com.absorb.sdk {
         "departmentId": departmentId,
         "firstName": firstName,
         "lastName": lastName,
-        "externalId": event:attr("externalId"),
+        "externalId": externalId,
         "gender": gender,
         "activeStatus": 0,
         "isLearner": true,
