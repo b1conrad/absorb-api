@@ -64,7 +64,7 @@ ruleset com.absorb.sdk {
       departmentId re#^@(\d{4})$#
       firstName re#(.+)#
       lastName re#(.+)#
-      gender re#(^@([FM])$#
+      gender re#^@([FM])$#
       setting(username,dept_id,firstName,lastName,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
