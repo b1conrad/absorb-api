@@ -89,6 +89,7 @@ ruleset edu.byu.hr_hired {
       obj
     }
     person = function(event_id){
+      url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
       e = ent:hr_events{event_id}
       id = e{["event_body","byu_id"]}
       ua = getUserAccount(event_id)
@@ -99,6 +100,7 @@ ruleset edu.byu.hr_hired {
 <<<tr><th>#{k}</th><td>#{v}</td></tr>
 >>
 }).values().join("")}</table>
+<a href="#{url+"?event_id="+event_id}">Manually create Absorb account</a>
 >>
       + html:footer()
     }
