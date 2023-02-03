@@ -92,7 +92,7 @@ ruleset com.absorb.sdk {
     if departmentId then
       http:post(url,headers=v1_headers(),json=body) setting(response)
     fired {
-      raise x event "account_added" attributes response
+      raise com_absorb_sdk event "account_added" attributes response
     }
   }
 }
