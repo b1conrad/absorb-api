@@ -61,7 +61,7 @@ ruleset com.absorb.sdk {
   rule createAccountForNewHire {
     select when com_absorb_sdk new_hire
       username re#^([a-z][a-z0-9]{1,7})$#
-      departmentId re#^@(\d{4})$#
+      departmentId re#^(\d{4})$#
       firstName re#(.+)#
       lastName re#(.+)#
       externalId re#^(\d{9})$#
