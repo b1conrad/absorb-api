@@ -79,7 +79,7 @@ ruleset edu.byu.hr_hired {
         "departmentId": "@" + dept_id,
         "firstName": basic{["preferred_first_name","value"]},
         "lastName": basic{["preferred_surname","value"]},
-        "gender": basic{["sex","value"]},
+        "gender": "@" + basic{["sex","value"]},
         "activeStatus":0,
         "isLearner":true,
         "isInstructor":false,
