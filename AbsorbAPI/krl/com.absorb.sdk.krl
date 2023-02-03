@@ -69,7 +69,7 @@ ruleset com.absorb.sdk {
       setting(username,dept_id,firstName,lastName,externalId,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
-      department = departments(dept_id)
+      department = departments(dept_id).head()
       departmentId = department => department{"Id"} | null
       body = {
         "id": "",
