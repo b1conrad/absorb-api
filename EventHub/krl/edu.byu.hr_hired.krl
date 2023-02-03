@@ -37,7 +37,7 @@ ruleset edu.byu.hr_hired {
       + <<<h1>Hired events</h1>
 <table>
 <tr>
-<th>№/#{ent:hr_events.length()}</th>
+<th>№/#{last}</th>
 <th>event_id</th>
 <th>event_dt</th>
 <th>dept_id</th>
@@ -140,7 +140,9 @@ ruleset edu.byu.hr_hired {
     pre {
       event = event:attr("event")
       event_id = event{["event_header","event_id"]}
+      valid_payload = event && event_id
     }
+    if valid_payload then noop()
     fired {
       ent:hr_events{event_id} := event
       raise edu_byu_hr_hired event "hired_event_received" attributes event:attrs
