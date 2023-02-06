@@ -73,12 +73,21 @@ ruleset edu.byu.hr_hired {
       s_code = response{"status_code"}
       content = s_code == 200 => response{"content"} | s_code
       basic = content.decode(){"basic"}
+      emailKeys = [
+        "byu_internal_email",
+        "student_email_address",
+        "personal_email_address",
+      ]
+      emailAddress = emailKeys.reduce(function(a,k){
+          a => a | basic{[k,"value"]}
+        },"")
       obj = {
         "id": "",
         "username": basic{["net_id","value"]},
         "departmentId": "@" + dept_id,
         "firstName": basic{["preferred_first_name","value"]},
         "lastName": basic{["preferred_surname","value"]},
+        "emailAddress": emailAddress,
         "externalId": id,
         "gender": "@" + basic{["sex","value"]},
         "activeStatus":0,
