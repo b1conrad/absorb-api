@@ -64,20 +64,21 @@ ruleset com.absorb.sdk {
       departmentId re#^(\d{4})$#
       firstName re#(.+)#
       lastName re#(.+)#
+      emailAddress re#(.+)# // more permissive than API
       externalId re#^(\d{9})$#
       gender re#^([FM])$#
-      setting(username,dept_id,firstName,lastName,externalId,sex)
+      setting(username,dept_id,firstName,lastName,emailAddress,externalId,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
       department = departments(dept_id).head()
       departmentId = department => department{"Id"} | null
       body = {
-        "id": "",
         "username": username,
         "password": "ChangeMe",
         "departmentId": departmentId,
         "firstName": firstName,
         "lastName": lastName,
+        "emailAddress": emailAddress,
         "externalId": externalId,
         "gender": gender,
         "activeStatus": 0,
