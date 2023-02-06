@@ -90,7 +90,7 @@ ruleset com.absorb.sdk {
       url = api_url + "users/upload?Key=0"
     }
     if departmentId then
-      http:post(url,headers=v1_headers(),json=body) setting(response)
+      http:post(url,headers=v1_headers(),json=[body]) setting(response)
     fired {
       raise com_absorb_sdk event "account_added" attributes response
     }
