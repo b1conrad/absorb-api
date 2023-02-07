@@ -33,6 +33,7 @@ ruleset edu.byu.hr_hired {
     index = function(){
       last = ent:hr_events.keys().length()
       del_base = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/ack?id=>>
+      prune_it = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/prune>>
       html:header("Hired events")
       + <<<h1>Hired events</h1>
 <table>
@@ -62,7 +63,7 @@ ruleset edu.byu.hr_hired {
 </tr>
 >>}).values().join("")}</table>
 <a href="export.txt" target="_blank">export</a>
-<form action="#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/prune">
+<form action="#{prune_it}">
 Prune keeping
 <input type="number" name="keeping" min="0" max="#{last}" required>.<br/>
 <button type="submit">prune</button>
@@ -166,7 +167,7 @@ Prune keeping
   rule acknowledgeEvents {
     select when edu_byu_hr_hired ack
     sdk:acknowledge(event:attr("id")) setting(response)
-    fired { // todo prune ent:hr_events
+    fired {
       raise edu_byu_hr_hired event "events_acknowledged" attributes response
     }
   }
