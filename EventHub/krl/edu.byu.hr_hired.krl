@@ -62,6 +62,11 @@ ruleset edu.byu.hr_hired {
 </tr>
 >>}).values().join("")}</table>
 <a href="export.txt" target="_blank">export</a>
+<form action="#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/prune">
+Prune keeping
+<input type="number" name="keeping" min="0" max="#{last}" required>.<br/>
+<button type="submit">prune</button>
+</form>
 >>
       + html:footer()
     }
