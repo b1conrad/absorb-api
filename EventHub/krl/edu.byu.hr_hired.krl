@@ -171,14 +171,6 @@ Prune keeping
       raise edu_byu_hr_hired event "events_acknowledged" attributes response
     }
   }
-  rule redirectBack {
-    select when edu_byu_hr_hired ack
-             or edu_byu_hr_hired prune
-    pre {
-      referrer = event:attr("_headers").get("referer") // sic
-    }
-    if referrer then send_directive("_redirect",{"url":referrer})
-  }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
     pre {
@@ -209,5 +201,13 @@ Prune keeping
     fired {
       ent:hr_events := kept_events
     }
+  }
+  rule redirectBack {
+    select when edu_byu_hr_hired ack
+             or edu_byu_hr_hired prune
+    pre {
+      referrer = event:attr("_headers").get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
 }
