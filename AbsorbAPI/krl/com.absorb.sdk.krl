@@ -1,7 +1,8 @@
 ruleset com.absorb.sdk {
   meta {
-    provides tokenValid, categories, users
+    provides tokenValid, categories, users, department
     shares latestResponse, theToken, tokenValid, departments, users
+, department // for manual testing
   }
   global {
     latestResponse = function(){
@@ -33,6 +34,12 @@ ruleset com.absorb.sdk {
     }
     categories = function(){
       http:get(api_url+"categories",headers=v1_headers())
+    }
+    department = function(id){
+      url = api_url+"departments/"+id
+      response = http:get(url,headers=v1_headers())
+      code = response{"status_code"}
+      code == 200 => response{"content"}.decode() | null
     }
     departments = function(id){
       url = api_url+"departments?ExternalId="+id
