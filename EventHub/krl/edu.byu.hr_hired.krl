@@ -113,10 +113,11 @@ latest events.<br/>
       accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
 .klog("accts")
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
-      obj = {
+      dept = acct => wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartmentById",{"id":acct{"DepartmentId"}}) | null
+      obj = acct => {
         "id": acct{"Id"},
         "username": acct{"Username"},
-        "departmentId": acct{"DepartmentId"},
+        "departmentId": dept || acct{"DepartmentId"},
         "firstName": acct{"FirstName"},
         "lastName": acct{"LastName"},
         "emailAddress": acct{"EmailAddress"},
@@ -127,8 +128,8 @@ latest events.<br/>
         "isInstructor": acct{"IsInstructor"},
         "isAdmin": acct{"IsAdmin"},
         "hasUsername": acct{"HasUsername"},
-      }
-      acct => obj | null
+      } | null
+      obj
     }
     person = function(event_id){
       url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
