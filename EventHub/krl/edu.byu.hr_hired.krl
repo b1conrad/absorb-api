@@ -190,4 +190,18 @@ Prune keeping
         {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
       )
   }
+  rule pruneKeeping {
+    select when edu_byu_hr_hired prune
+    pre {
+      keeping = event:attr("keeping").as("Number")
+      last = ent:hr_events.length()
+      valid = 0 <= keeping && keeping <= last
+      first_kept = last - keeping
+      kept_events = keeping => ent:hr_events.values().splice(0,first_kept)
+                             | []
+      kept_keys = kept_events.map(function(e){e{["event_header","event_id"]}})
+.klog("kept_keys")
+    }
+    if valid then noop()
+  }
 }
