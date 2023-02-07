@@ -133,15 +133,23 @@ Prune keeping
       url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
       e = ent:hr_events{event_id}
       id = e{["event_body","byu_id"]}
-      ua = getNewUserAccount(event_id)
+      nua = getNewUserAccount(event_id)
+      eua = getExistingUserAccount(event_id)
       html:header("Person "+id)
       + <<<h1>Person #{id}</h1>
+<h2>New Account</h2>
 <table>
-#{ua.map(function(v,k){
+#{nua.map(function(v,k){
 <<<tr><th>#{k}</th><td>#{v}</td></tr>
 >>
 }).values().join("")}</table>
 <a href="#{url+"?event_id="+event_id}">Manually create Absorb account</a>
+<h2>Existing Account</h2>
+<table>
+#{eua.map(function(v,k){
+<<<tr><th>#{k}</th><td>#{v}</td></tr>
+>>
+}).values().join("")}</table>
 >>
       + html:footer()
     }
