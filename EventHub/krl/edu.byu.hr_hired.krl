@@ -117,7 +117,7 @@ latest events.<br/>
       obj = acct => {
         "id": acct{"Id"},
         "username": acct{"Username"},
-        "departmentId": dept || acct{"DepartmentId"},
+        "departmentId": dept.encode() || acct{"DepartmentId"},
         "firstName": acct{"FirstName"},
         "lastName": acct{"LastName"},
         "emailAddress": acct{"EmailAddress"},
