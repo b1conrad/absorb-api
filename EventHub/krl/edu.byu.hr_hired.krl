@@ -38,7 +38,7 @@ ruleset edu.byu.hr_hired {
       + <<<h1>Hired events</h1>
 <table>
 <tr>
-<th>№/#{last}</th>
+<th>№</th>
 <th>event_id</th>
 <th>event_dt</th>
 <th>dept_id</th>
@@ -53,7 +53,7 @@ ruleset edu.byu.hr_hired {
   pid = b{"byu_id"}
   url = "person.html?event_id="+id
 <<<tr>
-<td>#{i+1}</td>
+<td>#{last-i}</td>
 <td title="#{id}">#{id.substr(0,7)}…</td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
 <td>#{e{["filters","filter","filter_value"]}}</td>
