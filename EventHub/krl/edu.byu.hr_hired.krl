@@ -76,8 +76,11 @@ latest events.<br/>
     getNewUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
+.klog("dept_id")
       eci = rel:established().head().get("Tx")
+.klog("eci")
       dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
+.klog("dept")
       id = e{["event_body","byu_id"]}
       content = sdk:persons(id)
       basic = content{"basic"}
