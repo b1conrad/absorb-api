@@ -1,6 +1,6 @@
 ruleset com.absorb.sdk {
   meta {
-    provides tokenValid, categories
+    provides tokenValid, categories, users
     shares latestResponse, theToken, tokenValid, departments, users
   }
   global {
