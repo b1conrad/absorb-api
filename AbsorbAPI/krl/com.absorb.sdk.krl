@@ -43,6 +43,7 @@ ruleset com.absorb.sdk {
     }
     departments = function(id){
       url = api_url+"departments?ExternalId="+id
+.klog("id")
       response = http:get(url,headers=v1_headers())
       code = response{"status_code"}
       code == 200 => response{"content"}.decode() | null
