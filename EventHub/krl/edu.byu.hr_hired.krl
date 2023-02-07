@@ -111,7 +111,7 @@ Prune keeping
       eci = rel:established().head().get("Tx")
       accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
 .klog("accts")
-      acct = accts.typeof()=="Array" => accts.head() | null
+      acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
       obj = {
         "id": acct{"Id"},
         "username": acct{"Username"},
