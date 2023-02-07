@@ -50,7 +50,7 @@ ruleset edu.byu.sdk {
       url = api_url + "byuapi/persons/v3/" + id
       response = http:get(url,headers=hdrs())
       s_code = response{"status_code"}
-      s_code == 200 => response{"content"} | s_code
+      s_code == 200 => response{"content"}.decode() | s_code
     }
   }
   rule generateAuthenticationToken {

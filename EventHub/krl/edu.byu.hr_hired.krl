@@ -78,7 +78,7 @@ latest events.<br/>
       dept_id = e{["filters","filter","filter_value"]}
       id = e{["event_body","byu_id"]}
       content = sdk:persons(id)
-      basic = content.decode(){"basic"}
+      basic = content{"basic"}
       emailKeys = [
         "byu_internal_email",
         "student_email_address",
