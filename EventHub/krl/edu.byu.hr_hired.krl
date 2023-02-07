@@ -172,6 +172,7 @@ Prune keeping
   }
   rule redirectBack {
     select when edu_byu_hr_hired ack
+             or edu_byu_hr_hired prune
     pre {
       referrer = event:attr("_headers").get("referer") // sic
     }
