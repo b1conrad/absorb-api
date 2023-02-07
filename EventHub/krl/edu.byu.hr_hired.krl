@@ -146,10 +146,10 @@ Prune keeping
 <a href="#{url+"?event_id="+event_id}">Manually create Absorb account</a>
 <h2>Existing Account</h2>
 <table>
-#{eua.map(function(v,k){
+#{eua => eua.map(function(v,k){
 <<<tr><th>#{k}</th><td>#{v}</td></tr>
 >>
-}).values().join("")}</table>
+}).values().join("") | "<tr><td>N/A</td></tr>"}</table>
 >>
       + html:footer()
     }
