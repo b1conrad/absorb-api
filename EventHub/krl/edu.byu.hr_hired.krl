@@ -109,28 +109,25 @@ Prune keeping
       e = ent:hr_events{event_id}
       net_id = e{["event_body","net_id"]}
       eci = rel:established().head().get("Tx")
-      acct = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
-.klog("acct")
-/*
-      dept_id = e{["filters","filter","filter_value"]}
+      accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
+.klog("accts")
+      acct = accts.typeof()=="Array" => accts.head() | null
       obj = {
-        "id": "",
-        "username": basic{["net_id","value"]},
-        "departmentId": "@" + dept_id,
-        "firstName": basic{["preferred_first_name","value"]},
-        "lastName": basic{["preferred_surname","value"]},
-        "emailAddress": emailAddress,
-        "externalId": id,
-        "gender": "@" + basic{["sex","value"]},
-        "activeStatus":0,
-        "isLearner":true,
-        "isInstructor":false,
-        "isAdmin":false,
-        "hasUsername":true,
+        "id": acct{"Id"},
+        "username": acct{"Username"},
+        "departmentId": acct{"DepartmentId"},
+        "firstName": acct{"FirstName"},
+        "lastName": acct{"LastName"},
+        "emailAddress": acct{"EmailAddress"},
+        "externalId": acct{"ExternalId"},
+        "gender": acct{"Gender"},
+        "activeStatus": acct{"ActiveStatus"},
+        "isLearner": acct{"IsLearner"},
+        "isInstructor": acct{"IsInstructor"},
+        "isAdmin": acct{"IsAdmin"},
+        "hasUsername": acct{"HasUsername"},
       }
-      obj
-*/
-      null
+      acct => obj | null
     }
     person = function(event_id){
       url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
