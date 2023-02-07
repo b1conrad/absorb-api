@@ -77,9 +77,7 @@ latest events.<br/>
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
       id = e{["event_body","byu_id"]}
-      response = sdk:persons(id)
-      s_code = response{"status_code"}
-      content = s_code == 200 => response{"content"} | s_code
+      content = sdk:persons(id)
       basic = content.decode(){"basic"}
       emailKeys = [
         "byu_internal_email",

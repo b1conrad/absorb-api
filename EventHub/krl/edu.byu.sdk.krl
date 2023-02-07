@@ -48,7 +48,9 @@ ruleset edu.byu.sdk {
     }
     persons = function(id){
       url = api_url + "byuapi/persons/v3/" + id
-      http:get(url,headers=hdrs())
+      response = http:get(url,headers=hdrs())
+      s_code = response{"status_code"}
+      s_code == 200 => response{"content"} | s_code
     }
   }
   rule generateAuthenticationToken {
