@@ -196,12 +196,16 @@ Prune keeping
       keeping = event:attr("keeping").as("Number")
       last = ent:hr_events.length()
       valid = 0 <= keeping && keeping <= last
-      first_kept = last - keeping
-      kept_events = keeping => ent:hr_events.values().splice(0,first_kept)
-                             | []
-      kept_keys = kept_events.map(function(e){e{["event_header","event_id"]}})
-.klog("kept_keys")
+      remove = last - keeping
+      kept_event_ids = keeping => ent:hr_events.keys().splice(0,remove)
+                                | []
+      number_kept = kept_event_ids.length()
+.klog("number_kept")
+      kept_events = ent:hr_events.filter(function(v,k){kept_event_ids >< k})
     }
-    if valid then noop()
+    if valid && number_kept == keeping then noop()
+    fired {
+      ent:hr_events := kept_events
+    }
   }
 }
