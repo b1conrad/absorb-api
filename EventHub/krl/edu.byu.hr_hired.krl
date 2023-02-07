@@ -76,13 +76,15 @@ latest events.<br/>
     getNewUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
+      eci = rel:established().head().get("Tx")
+      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
       id = e{["event_body","byu_id"]}
       content = sdk:persons(id)
       basic = content{"basic"}
       emailKeys = [
-        "student_email_address",
         "byu_internal_email",
         "personal_email_address",
+        "student_email_address",
       ]
       emailAddress = emailKeys.reduce(function(a,k){
           a => a | basic{[k,"value"]}
@@ -90,7 +92,7 @@ latest events.<br/>
       obj = {
         "id": "",
         "username": basic{["net_id","value"]},
-        "departmentId": "@" + dept_id,
+        "departmentId": dept.encode() || "@" + dept_id,
         "firstName": basic{["preferred_first_name","value"]},
         "lastName": basic{["preferred_surname","value"]},
         "emailAddress": emailAddress,
