@@ -5,7 +5,8 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
     shares eh_subscriptions, eh_events, index, export, person
-, getUserAccount
+, getNewUserAccount
+, getExistingUserAccount
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -71,7 +72,7 @@ Prune keeping
 >>
       + html:footer()
     }
-    getUserAccount = function(event_id){
+    getNewUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
       id = e{["event_body","byu_id"]}
@@ -104,11 +105,38 @@ Prune keeping
       }
       obj
     }
+    getExistingUserAccount = function(event_id){
+      e = ent:hr_events{event_id}
+      net_id = e{["event_body","net_id"]}
+      eci = rel:established().head().get("Tx")
+      acct = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
+.klog("acct")
+/*
+      dept_id = e{["filters","filter","filter_value"]}
+      obj = {
+        "id": "",
+        "username": basic{["net_id","value"]},
+        "departmentId": "@" + dept_id,
+        "firstName": basic{["preferred_first_name","value"]},
+        "lastName": basic{["preferred_surname","value"]},
+        "emailAddress": emailAddress,
+        "externalId": id,
+        "gender": "@" + basic{["sex","value"]},
+        "activeStatus":0,
+        "isLearner":true,
+        "isInstructor":false,
+        "isAdmin":false,
+        "hasUsername":true,
+      }
+      obj
+*/
+      null
+    }
     person = function(event_id){
       url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
       e = ent:hr_events{event_id}
       id = e{["event_body","byu_id"]}
-      ua = getUserAccount(event_id)
+      ua = getNewUserAccount(event_id)
       html:header("Person "+id)
       + <<<h1>Person #{id}</h1>
 <table>
