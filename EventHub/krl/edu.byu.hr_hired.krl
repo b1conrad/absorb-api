@@ -80,8 +80,8 @@ latest events.<br/>
       content = sdk:persons(id)
       basic = content{"basic"}
       emailKeys = [
-        "byu_internal_email",
         "student_email_address",
+        "byu_internal_email",
         "personal_email_address",
       ]
       emailAddress = emailKeys.reduce(function(a,k){
