@@ -202,8 +202,8 @@ input.wide90 {
 >>}).join("")}
 <tr><td colspan="3">
 <form action="#{url}">
-<input name="name" required>
-<input name="url" required class="wide90">
+<input name="name" required placeholder="name">
+<input name="url" required class="wide90" placeholder="url">
 <button type="submit">add</button>
 </form>
 </td></tr>
