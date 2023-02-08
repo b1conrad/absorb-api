@@ -172,6 +172,20 @@ latest events.<br/>
       lines = ent:hr_events.values().map(one_line).join(chr(10))
       th + chr(10) + lines
     }
+    styles = <<<style type="text/css">
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid black;
+  padding: 5px;
+}
+input.wide90 {
+  width: 90%;
+}
+</style>
+>>
     forward = function(){
       base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/>>
       url = base_url + "forwarding_requested"
@@ -179,18 +193,21 @@ latest events.<br/>
         del_url = base_url + "forwarding_deletion_requested?name="
         <<<a href="#{del_url+m{"name"}}">del</a\>>>
       }
-      html:header("Forwarding")
+      html:header("Forwarding",styles)
       + <<<h1>Forwarding</h1>
 <table>
 <tr><th>name</th><th>url</th><th>del</th></tr>
 #{ent:forward.values().map(function(v){
 <<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{delr(v)}</td></tr>
->>}).join("")}</table>
+>>}).join("")}
+<tr><td colspan="3">
 <form action="#{url}">
 <input name="name" required>
-<input name="url" required>
+<input name="url" required class="wide90">
 <button type="submit">add</button>
 </form>
+</td></tr>
+</table>
 >>
       + html:footer()
     }
