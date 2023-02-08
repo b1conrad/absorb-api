@@ -4,7 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export, person
+    shares eh_subscriptions, eh_events, index, export, person, forward
 , getNewUserAccount
 , getExistingUserAccount
   }
@@ -172,6 +172,28 @@ latest events.<br/>
       lines = ent:hr_events.values().map(one_line).join(chr(10))
       th + chr(10) + lines
     }
+    forward = function(){
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/>>
+      url = base_url + "forwarding_requested"
+      delr = function(m){
+        del_url = base_url + "forwarding_deletion_requested?name="
+        <<<a href="#{del_url+m{"name"}}">del</a\>>>
+      }
+      html:header("Forwarding")
+      + <<<h1>Forwarding</h1>
+<table>
+<tr><th>name</th><th>url</th><th>del</th></tr>
+#{ent:forward.values().map(function(v){
+<<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{delr(v)}</td></tr>
+>>}).join("")}</table>
+<form action="#{url}">
+<input name="name" required>
+<input name="url" required>
+<button type="submit">add</button>
+</form>
+>>
+      + html:footer()
+    }
   }
   rule fetchSomeEvents {
     select when edu_byu_hr_hired events_in_queue
@@ -243,9 +265,33 @@ latest events.<br/>
       ent:hr_events := kept_events
     }
   }
+  rule addForwarding {
+    select when edu_byu_hr_hired forwarding_requested
+      name re#(.+)#
+      url re#(.+)#
+      setting(name,url)
+    pre {
+      entry = {"name":name,"url":url}
+    }
+    fired {
+      ent:forward := ent:forward.defaultsTo({}).put(name,entry)
+      raise edu_byu_hr_hired event "new_forward" attributes event:attrs
+    }
+  }
+  rule stopForwarding {
+    select when edu_byu_hr_hired forwarding_deletion_requested
+      name re#(.+)#
+      setting(name)
+    if ent:forward.keys() >< name then noop()
+    fired {
+      clear ent:forward{name}
+      raise edu_byu_hr_hired event "new_forward" attributes event:attrs
+    }
+  }
   rule redirectBack {
     select when edu_byu_hr_hired ack
              or edu_byu_hr_hired prune
+             or edu_byu_hr_hired new_forward
     pre {
       referrer = event:attr("_headers").get("referer") // sic
     }
