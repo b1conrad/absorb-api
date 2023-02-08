@@ -155,6 +155,9 @@ latest events.<br/>
 <<<tr><th>#{k}</th><td>#{v}</td></tr>
 >>
 }).values().join("") | "<tr><td>N/A</td></tr>"}</table>
+<h2>Notes</h2>
+<pre contenteditable>paste data here</pre>
+<p contenteditable>write comments here</p>
 >>
       + html:footer()
     }
