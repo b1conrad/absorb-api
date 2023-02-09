@@ -79,7 +79,7 @@ latest events.<br/>
 .klog("dept_id")
       eci = rel:established().head().get("Tx")
 .klog("eci")
-      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
+      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartments",{"id":dept_id})
 .klog("dept")
       id = e{["event_body","byu_id"]}
       content = sdk:persons(id)
@@ -113,10 +113,10 @@ latest events.<br/>
       e = ent:hr_events{event_id}
       net_id = e{["event_body","net_id"]}
       eci = rel:established().head().get("Tx")
-      accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getUsers",{"net_id":net_id})
+      accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getUsers",{"net_id":net_id})
 .klog("accts")
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
-      dept = acct => wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartmentById",{"id":acct{"DepartmentId"}}) | null
+      dept = acct => wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartmentById",{"id":acct{"DepartmentId"}}) | null
       obj = acct => {
         "id": acct{"Id"},
         "username": acct{"Username"},
@@ -239,7 +239,7 @@ input.wide90 {
 //      absorb = rel:established().head()
 //      eci = absorb{"Tx"}
 //      dept_id = event{["filters","filter","filter_value"]}
-//      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test ","getDepartments",{"id":dept_id})
+//      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartments",{"id":dept_id})
 //      body = event{"event_body"}
 //      byu_id = body{"byu_id"}
 //      net_id = body{"net_id"}
@@ -344,6 +344,19 @@ input.wide90 {
     if fields.head().match(re#\d{4}#) then noop()
     fired {
       raise edu_byu_hr_hired event "new_doi" attributes entry
+    }
+  }
+  rule importOneDepartment {
+    select when edu_byu_hr_hired new_doi
+    pre {
+      code = event:attrs{"code"}
+      name = event:attrs{"name"}
+      eci = rel:established().head().get("Tx")
+      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartments",{"id":code}).head()
+      entry = {"code":code,"name":name,"a_id":dept{"Id"}}
+    }
+    fired {
+      ent:doi := ent:doi.defaultsTo({}).put(code,entry)
     }
   }
 }
