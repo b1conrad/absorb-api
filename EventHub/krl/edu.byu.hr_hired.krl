@@ -81,8 +81,7 @@ latest events.<br/>
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
       eci = rel:established().head().get("Tx")
-      dept_of_interest = (ent:doi >< dept_id).klog("dept_of_interest")
-      dept = ent:doi >< dept_id => ent:doi{"dept_id"}
+      dept = ent:doi >< dept_id => ent:doi{dept_id}
                                  | wrangler:picoQuery(
                                      eci,
                                      "edu.byu.absorb-api-test",
