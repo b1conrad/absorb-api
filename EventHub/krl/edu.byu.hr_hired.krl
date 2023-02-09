@@ -182,7 +182,7 @@ td, th {
   padding: 5px;
 }
 input.wide90 {
-  width: 90%;
+  width: 40em;
 }
 </style>
 >>
@@ -193,6 +193,12 @@ input.wide90 {
         del_url = base_url + "forwarding_deletion_requested?name="
         <<<a href="#{del_url+m{"name"}}">del</a\>>>
       }
+      js1 = function(to){
+        "document.getElementById('forward_" + to + "').value = this.value"
+      }
+      js2 = function(){
+        "document.getElementById('forward_form').submit"
+      }
       html:header("Forwarding",styles)
       + <<<h1>Forwarding</h1>
 <table>
@@ -200,14 +206,16 @@ input.wide90 {
 #{ent:forward.values().map(function(v){
 <<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{delr(v)}</td></tr>
 >>}).join("")}
-<tr><td colspan="3">
-<form action="#{url}">
-<input name="name" required placeholder="name">
-<input name="url" required class="wide90" placeholder="url">
-<button type="submit">add</button>
-</form>
+<tr>
+<td><input onchange="#{js1("name")}" required placeholder="name"></td>
+<td><input onchange="#{js1("url")}" required class="wide90" placeholder="url"></td>
+<td><button onclick="#{js2()}">add</button></td>
 </td></tr>
 </table>
+<form id="forward_form" action="#{url}">
+<input id="forward_name" name="name" type="hidden">
+<input id="forward_url" name="url" type="hidden">
+</form>
 >>
       + html:footer()
     }
