@@ -187,10 +187,10 @@ input.wide90 {
 </style>
 >>
     forward = function(){
-      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/>>
-      url = base_url + "forwarding_requested"
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
+      url = base_url + "/forwarding_requested"
       delr = function(m){
-        del_url = base_url + "forwarding_deletion_requested?name="
+        del_url = base_url + "/forwarding_deletion_requested?name="
         <<<a href="#{del_url+m{"name"}}">del</a\>>>
       }
       js1 = function(to){
@@ -221,10 +221,10 @@ input.wide90 {
     }
     newline = (13.chr() + "?" + 10.chr()).as("RegExp")
     import = function(){
-      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/>>
-      html:header("Forwarding")
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
+      html:header("Import")
       + <<<h1>Import</h1>
-<form action="#{base_url}import_data_available">
+<form action="#{base_url}/import_data_available">
 <textarea name="import_data"></textarea>
 <button type="submit">Submit</button>
 </form>
