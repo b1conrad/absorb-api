@@ -4,7 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export, person, forward
+    shares eh_subscriptions, eh_events, index, export, person, forward, import
 , getNewUserAccount
 , getExistingUserAccount
   }
@@ -219,6 +219,18 @@ input.wide90 {
 >>
       + html:footer()
     }
+    newline = (13.chr() + "?" + 10.chr()).as("RegExp")
+    import = function(){
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/>>
+      html:header("Forwarding")
+      + <<<h1>Import</h1>
+<form action="#{base_url}import_data_available">
+<textarea name="import_data"></textarea>
+<button type="submit">Submit</button>
+</form>
+>>
+      + html:footer()
+    }
   }
   rule fetchSomeEvents {
     select when edu_byu_hr_hired events_in_queue
@@ -321,5 +333,17 @@ input.wide90 {
       referrer = event:attr("_headers").get("referer") // sic
     }
     if referrer then send_directive("_redirect",{"url":referrer})
+  }
+  rule importDepartmentsOfInterest {
+    select when edu_byu_hr_hired import_data_available
+    foreach event:attrs{"import_data"}.split(newline) setting(line)
+    pre {
+      fields = line.split(chr(9))
+      entry = {"code":fields.head(),"name":fields[1]}
+    }
+    if fields.head().match(re#\d{4}#) then noop()
+    fired {
+      raise edu_byu_hr_hired event "new_doi" attributes entry
+    }
   }
 }
