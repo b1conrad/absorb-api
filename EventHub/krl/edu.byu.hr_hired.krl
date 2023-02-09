@@ -197,12 +197,12 @@ input.wide90 {
         "document.getElementById('forward_" + to + "').value = this.value"
       }
       js2 = function(){
-        "document.getElementById('forward_form').submit"
+        "document.getElementById('forward_form').submit()"
       }
       html:header("Forwarding",styles)
       + <<<h1>Forwarding</h1>
 <table>
-<tr><th>name</th><th>url</th><th>del</th></tr>
+<tr><th>name</th><th>url</th><th></th></tr>
 #{ent:forward.values().map(function(v){
 <<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{delr(v)}</td></tr>
 >>}).join("")}
