@@ -46,6 +46,7 @@ ruleset edu.byu.hr_hired {
 <th>byu_id</th>
 <th>net_id</th>
 <th>eff_dt</th>
+<th>doi</th>
 </tr>
 #{ent:hr_events.values().reverse().map(function(e,i){
   h = e{"event_header"}
@@ -53,14 +54,17 @@ ruleset edu.byu.hr_hired {
   id = h{"event_id"}
   pid = b{"byu_id"}
   url = "person.html?event_id="+id
+  dept_id = e{["filters","filter","filter_value"]}
+  a_id = ent:doi.keys() >< dept_id => ent:doi{dept_id}.encode() | "no"
 <<<tr>
 <td>#{last-i}</td>
 <td title="#{id}">#{id.substr(0,7)}…</td>
 <td>#{h{"event_dt"}.makeMT().ts_format()}</td>
-<td>#{e{["filters","filter","filter_value"]}}</td>
+<td>#{dept_id}</td>
 <td><a href="#{url}" target="_blank">#{pid}</a></td>
 <td>#{b{"net_id"}}</td>
 <td>#{b{"effective_date"}}</td>
+<td>#{a_id}</td>
 </tr>
 >>}).values().join("")}</table>
 <a href="export.txt" target="_blank">export</a>
