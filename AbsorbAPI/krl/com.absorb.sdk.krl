@@ -53,6 +53,7 @@ ruleset com.absorb.sdk {
     users_upload = defaction(body){
       url = api_url + "users/upload?Key=0"
       http:post(url,headers=v1_headers(),json=[body]) setting(response)
+      return response
     }
   }
   rule generateAuthenticationToken {
