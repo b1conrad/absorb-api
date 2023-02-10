@@ -239,18 +239,10 @@ input.wide90 {
       + html:footer()
     }
   }
-  rule fetchSomeEvents {
+  rule fetchSomeEvents { // not currently used
     select when edu_byu_hr_hired events_in_queue
     foreach eh_events(event:attr("n")||1,false) setting(event)
     pre {
-//      absorb = rel:established().head()
-//      eci = absorb{"Tx"}
-//      dept_id = event{["filters","filter","filter_value"]}
-//      dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartments",{"id":dept_id})
-//      body = event{"event_body"}
-//      byu_id = body{"byu_id"}
-//      net_id = body{"net_id"}
-//      eff_dt = body{"effective_date"}
       event_id = event{["event_header","event_id"]}
     }
     fired {
@@ -258,12 +250,20 @@ input.wide90 {
       raise edu_byu_hr_hired event "hired_event_fetched" attributes {"event":event}
     }
   }
+  rule acknowledgeEvents { // not currently used
+    select when edu_byu_hr_hired ack
+    sdk:acknowledge(event:attr("id")) setting(response)
+    fired {
+      raise edu_byu_hr_hired event "events_acknowledged" attributes response
+    }
+  }
   rule reactToWebhook {
     select when HR_Personal_Action Hired
     pre {
       event = event:attr("event")
       event_id = event{["event_header","event_id"]}
-      valid_payload = event && event_id
+      byu_id = event{["event_body","byu_id"]}
+      valid_payload = event && event_id && byu_id
     }
     if valid_payload then noop()
     fired {
@@ -271,12 +271,8 @@ input.wide90 {
       raise edu_byu_hr_hired event "hired_event_received" attributes event:attrs
     }
   }
-  rule acknowledgeEvents {
-    select when edu_byu_hr_hired ack
-    sdk:acknowledge(event:attr("id")) setting(response)
-    fired {
-      raise edu_byu_hr_hired event "events_acknowledged" attributes response
-    }
+  rule internalFollowUp {
+    select when edu_byu_hr_hired hired_event_received
   }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
