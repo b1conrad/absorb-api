@@ -62,7 +62,7 @@ ruleset edu.byu.absorb-api-test {
       setting(username,dept_id,firstName,lastName,emailAddress,externalId,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
-      department = sdk:departments(dept_id).head()
+      department = absorb:departments(dept_id).head()
       departmentId = department => department{"Id"} | null
       body = {
         "username": username,
