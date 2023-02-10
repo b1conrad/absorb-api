@@ -17,8 +17,8 @@ ruleset edu.byu.sdk {
       tokenTime = ent:issued
       ttl = ent:token{"expires_in"} - 60 // with a minute to spare
       expiredTime = time:add(tokenTime,{"seconds":ttl})
+.klog("expiredTime")
       ent:token{"access_token"}
-.klog("theToken")
       && tokenTime
 .klog("timestamp")
       && (expiredTime > time:now())
