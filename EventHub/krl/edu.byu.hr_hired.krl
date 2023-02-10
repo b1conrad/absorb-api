@@ -404,7 +404,7 @@ input.wide90 {
       nua = getNewUserAccount(event_id)
       eci = rel:established().head().get("Tx")
     }
-    if eci && nua{"externalId"} then
+    if eci && nua{"externalId"} && nua{"username"} then
       event:send({
         "eci":eci,
         "domain":"absorb_api_test",
