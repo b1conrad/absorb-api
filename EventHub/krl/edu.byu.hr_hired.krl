@@ -278,7 +278,7 @@ input.wide90 {
       event = event:attr("event")
       dept_id = event{["filters","filter","filter_value"]}
       of_interest = ent:doi >< dept_id
-      my_eci = of_interest => wrangler:channels("event_hub,sdk-and-test")
+      my_eci = of_interest => wrangler:channels("event_hub,sdk-and-test").head(){"id"}
                             | null
     }
     if of_interest then every {
@@ -354,7 +354,7 @@ input.wide90 {
     pre {
       event_id = event:attrs{"event_id"}
       event = ent:hr_events{event_id}
-      my_eci = wrangler:channels("event_hub,sdk-and-test")
+      my_eci = wrangler:channels("event_hub,sdk-and-test").head(){"id"}
     }
     if event then every {
       event:send({
