@@ -53,7 +53,7 @@ ruleset com.absorb.sdk {
     users_upload = defaction(body){
       url = api_url + "users/upload?Key=0"
       http:post(url,headers=v1_headers(),json=[body]) setting(response)
-      return response.klog("response")
+      return response
     }
   }
   rule generateAuthenticationToken {
@@ -71,44 +71,6 @@ ruleset com.absorb.sdk {
       ent:token := response{"status_code"}==200 => response{"content"}.decode()
                                                  | null
       ent:issued := time:now()
-    }
-  }
-  rule createAccountForNewHire {
-    select when com_absorb_sdk new_hire
-      username re#^([a-z][a-z0-9]{1,7})$#
-      departmentId re#^(\d{4})$#
-      firstName re#(.+)#
-      lastName re#(.+)#
-      emailAddress re#(.+)# // more permissive than API
-      externalId re#^(\d{9})$#
-      gender re#^([FM])$#
-      setting(username,dept_id,firstName,lastName,emailAddress,externalId,sex)
-    pre {
-      gender = sex=="F" => 2 | sex=="M" => 1 | 0
-      department = departments(dept_id).head()
-      departmentId = department => department{"Id"} | null
-      body = {
-        "username": username,
-        "password": "ChangeMe",
-        "departmentId": departmentId,
-        "firstName": firstName,
-        "lastName": lastName,
-        "emailAddress": emailAddress,
-        "externalId": externalId,
-        "gender": gender,
-        "activeStatus": 0,
-        "isLearner": true,
-        "isInstructor": false,
-        "isAdmin": false,
-        "hasUsername": true,
-      }
-.klog("body")
-      url = api_url + "users/upload?Key=0"
-    }
-    if departmentId then
-      http:post(url,headers=v1_headers(),json=[body]) setting(response)
-    fired {
-      raise com_absorb_sdk event "account_added" attributes response
     }
   }
   rule checkIfTokenNeeded {
