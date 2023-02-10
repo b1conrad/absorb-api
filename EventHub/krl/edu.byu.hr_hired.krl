@@ -142,7 +142,8 @@ latest events.<br/>
       obj
     }
     person = function(event_id){
-      url = <<#{meta:host}/c/#{meta:eci}/event/#{rs_event_domain}/new_account>>
+      base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
+      url = base_url + "/new_account"
       e = ent:hr_events{event_id}
       id = e{["event_body","byu_id"]}
       nua = getNewUserAccount(event_id)
@@ -348,10 +349,23 @@ input.wide90 {
       raise edu_byu_hr_hired event "new_forward" attributes event:attrs
     }
   }
+  rule manuallyCreateNewAbsorbAccount {
+    select when edu_byu_hr_hired new_account
+    pre {
+      event_id = event:attrs{"event_id"}
+      event = ent:hr_events{event_id}
+    }
+    if event then noop()
+    fired {
+      raise edu_byu_hr_hired event "new_hire_of_interest"
+        attributes {"event":event}
+    }
+  }
   rule redirectBack {
     select when edu_byu_hr_hired ack
              or edu_byu_hr_hired prune
              or edu_byu_hr_hired new_forward
+             or edu_byu_hr_hired new_account
     pre {
       referrer = event:attr("_headers").get("referer") // sic
     }
@@ -381,5 +395,8 @@ input.wide90 {
     fired {
       ent:doi := ent:doi.defaultsTo({}).put(code,entry)
     }
+  }
+  rule createNewAbsorbAccount {
+    select when edu_byu_hr_hired new_hire_of_interest
   }
 }
