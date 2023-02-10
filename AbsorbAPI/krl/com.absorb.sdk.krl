@@ -17,7 +17,7 @@ ruleset com.absorb.sdk {
     PrivateKey = meta:rulesetConfig{"PrivateKey"}
     api_url = "https://"+SubDomain+".myabsorb.com/api/Rest/v1/"
     tokenValid = function(){
-      tokenTime = ent:valid
+      tokenTime = ent:issued || ent:valid
       ent:token
 .klog("theToken")
       && tokenTime
@@ -68,7 +68,8 @@ ruleset com.absorb.sdk {
       ent:latestResponse := response
       ent:token := response{"status_code"}==200 => response{"content"}.decode()
                                                  | null
-      ent:valid := time:now()
+      ent:issued := time:now()
+      clear ent:valid
     }
   }
   rule createAccountForNewHire {
@@ -107,6 +108,13 @@ ruleset com.absorb.sdk {
       http:post(url,headers=v1_headers(),json=[body]) setting(response)
     fired {
       raise com_absorb_sdk event "account_added" attributes response
+    }
+  }
+  rule checkIfTokenNeeded {
+    select when com_absorb_sdk token_check_needed
+    if not tokenValid() then noop()
+    fired {
+      raise com_absorb_sdk event "tokenNeeded"
     }
   }
 }
