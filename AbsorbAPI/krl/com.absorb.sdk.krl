@@ -1,6 +1,6 @@
 ruleset com.absorb.sdk {
   meta {
-    provides tokenValid, categories, users, department, departments
+    provides tokenValid, users, department, departments, users_upload
     shares latestResponse, theToken, tokenValid, departments, users
 , department // for manual testing
   }
@@ -17,7 +17,7 @@ ruleset com.absorb.sdk {
     PrivateKey = meta:rulesetConfig{"PrivateKey"}
     api_url = "https://"+SubDomain+".myabsorb.com/api/Rest/v1/"
     tokenValid = function(){
-      tokenTime = ent:issued || ent:valid
+      tokenTime = ent:issued
       ent:token
 .klog("theToken")
       && tokenTime
@@ -31,9 +31,6 @@ ruleset com.absorb.sdk {
         "x-api-key":PrivateKey,
         "Authorization":ent:token
       }
-    }
-    categories = function(){
-      http:get(api_url+"categories",headers=v1_headers())
     }
     department = function(id){
       url = api_url+"departments/"+id
@@ -53,6 +50,10 @@ ruleset com.absorb.sdk {
       code = response{"status_code"}
       code == 200 => response{"content"}.decode() | null
     }
+    users_upload = defaction(body){
+      url = api_url + "users/upload?Key=0"
+      http:post(url,headers=v1_headers(),json=[body]) setting(response)
+    }
   }
   rule generateAuthenticationToken {
     select when com_absorb_sdk tokenNeeded
@@ -69,7 +70,6 @@ ruleset com.absorb.sdk {
       ent:token := response{"status_code"}==200 => response{"content"}.decode()
                                                  | null
       ent:issued := time:now()
-      clear ent:valid
     }
   }
   rule createAccountForNewHire {
