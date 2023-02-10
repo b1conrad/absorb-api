@@ -70,4 +70,11 @@ ruleset edu.byu.sdk {
       ent:valid := time:now()
     }
   }
+  rule checkIfTokenNeeded {
+    select when edu_byu_sdk token_check_needed
+    if not tokenValid() then noop()
+    fired {
+      raise edu_byu_sdk event "tokenNeeded"
+    }
+  }
 }
