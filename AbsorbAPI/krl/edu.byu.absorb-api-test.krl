@@ -77,7 +77,7 @@ ruleset edu.byu.absorb-api-test {
       }
 .klog("body")
     }
-    if departmentId then sdk:users_upload(body) setting(response)
+    if departmentId then absorb:users_upload(body) setting(response)
     fired {
       raise absorb_api_test event "account_added" attributes response
     }
