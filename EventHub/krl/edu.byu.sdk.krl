@@ -14,7 +14,7 @@ ruleset edu.byu.sdk {
     ClientSecret = meta:rulesetConfig{"ClientSecret"}
     api_url = "https://api.byu.edu/"
     tokenValid = function(){
-      tokenTime = ent:issued
+      tokenTime = ent:issued || ent:valid
       ttl = ent:token{"expires_in"} - 60 // with a minute to spare
       expiredTime = time:add(tokenTime,{"seconds":ttl})
 .klog("expiredTime")
