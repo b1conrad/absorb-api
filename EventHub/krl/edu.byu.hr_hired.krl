@@ -354,11 +354,20 @@ input.wide90 {
     pre {
       event_id = event:attrs{"event_id"}
       event = ent:hr_events{event_id}
+      my_eci = wrangler:channels("event_hub,sdk-and-test")
     }
-    if event then noop()
-    fired {
-      raise edu_byu_hr_hired event "new_hire_of_interest"
-        attributes {"event":event}
+    if event then every {
+      event:send({
+        "eci":my_eci,
+        "domain":"edu_byu_sdk",
+        "type":"token_check_needed"
+      })
+      event:send({
+        "eci":my_eci,
+        "domain":"edu_byu_hr_hired",
+        "type":"new_hire_of_interest",
+        "attrs":{"event":event}
+      })
     }
   }
   rule redirectBack {
