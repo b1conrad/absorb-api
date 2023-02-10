@@ -273,6 +273,26 @@ input.wide90 {
   }
   rule internalFollowUp {
     select when edu_byu_hr_hired hired_event_received
+    pre {
+      event = event:attr("event")
+      dept_id = event{["filters","filter","filter_value"]}
+      of_interest = ent:doi >< dept_id
+      my_eci = of_interest => wrangler:channels("event_hub,sdk-and-test")
+                            | null
+    }
+    if of_interest then every {
+      event:send({
+        "eci":my_eci,
+        "domain":"edu_byu_sdk",
+        "type":"token_check_needed"
+      })
+      event:send({
+        "eci":my_eci,
+        "domain":"edu_byu_hr_hired",
+        "type":"new_hire_of_interest",
+        "attrs":event:attrs
+      })
+    }
   }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
