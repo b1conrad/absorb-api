@@ -398,5 +398,21 @@ input.wide90 {
   }
   rule createNewAbsorbAccount {
     select when edu_byu_hr_hired new_hire_of_interest
+    pre {
+      event = event:attr("event")
+      event_id = event{["event_header","event_id"]}
+      nua = getNewUserAccount(event_id)
+      eci = rel:established().head().get("Tx")
+    }
+    if eci && nua{"externalId"} then
+      event:send({
+        "eci":eci,
+        "domain":"absorb_api_test",
+        "type":"account_requested",
+        "attrs":nua
+      })
+    fired {
+      raise edu_byu_hr_hired event "account_requested" attributes event:attrs
+    }
   }
 }
