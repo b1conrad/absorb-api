@@ -14,12 +14,14 @@ ruleset edu.byu.sdk {
     ClientSecret = meta:rulesetConfig{"ClientSecret"}
     api_url = "https://api.byu.edu/"
     tokenValid = function(){
-      tokenTime = ent:valid
+      tokenTime = ent:issued
+      ttl = ent:token{"expires_in"} - 60 // with a minute to spare
+      expiredTime = time:add(tokenTime,{"seconds":ttl})
       ent:token{"access_token"}
 .klog("theToken")
       && tokenTime
 .klog("timestamp")
-      && (time:add(tokenTime,{"hours":2}) > time:now())
+      && (expiredTime > time:now())
 .klog("not yet expired")
     }
     hdrs = function(){
@@ -67,7 +69,8 @@ ruleset edu.byu.sdk {
       ent:latestResponse := response
       ent:token := response{"status_code"}==200 => response{"content"}.decode()
                                                  | null
-      ent:valid := time:now()
+      ent:issued := time:now()
+      clear ent:valid
     }
   }
   rule checkIfTokenNeeded {
