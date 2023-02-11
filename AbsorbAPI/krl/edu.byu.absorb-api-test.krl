@@ -104,4 +104,39 @@ ruleset edu.byu.absorb-api-test {
       })
     }
   }
+  rule updateExistingAccount {
+    select when absorb_api_test account_may_need_updating
+      username re#(.+)# setting(username)
+    pre {
+      accts = absorb:users(username)
+      acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
+      logit = acct.klog("acct")
+      obj = acct.isnull() => null |
+            acct.put("departmentId",event:attrs{"departmentId"}.get("a_id"))
+                .put("activeStatus",0)
+    }
+    if obj then absorb:users_upload(obj) setting(response)
+    fired {
+      raise absorb_api_test event "account_updated" attributes response
+    }
+  }
+  rule createAccount {
+    select when absorb_api_test account_may_need_creating
+      username re#(.+)#
+      gender re#([FM])$#
+      setting(username,sex)
+    pre {
+      gender = sex=="F" => 2 | sex=="M" => 1 | 0
+      accts = absorb:users(username)
+      acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
+      obj = acct => null |
+        event:attrs.put("departmentId",event:attrs{"departmentId"}.get("a_id"))
+                   .put("gender",gender)
+                   .put("password","ChangeMe")
+    }
+    if obj then absorb:users_upload(obj) setting(response)
+    fired {
+      raise absorb_api_test event "account_created" attributes response
+    }
+  }
 }
