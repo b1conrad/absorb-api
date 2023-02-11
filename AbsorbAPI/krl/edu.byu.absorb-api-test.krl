@@ -133,6 +133,8 @@ ruleset edu.byu.absorb-api-test {
         event:attrs.put("departmentId",event:attrs{"departmentId"}.get("a_id"))
                    .put("gender",gender)
                    .put("password","ChangeMe")
+                   .delete("id")
+.klog("obj")
     }
     if obj then absorb:users_upload(obj) setting(response)
     fired {
