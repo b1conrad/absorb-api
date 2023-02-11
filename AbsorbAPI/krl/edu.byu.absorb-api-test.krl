@@ -112,8 +112,8 @@ ruleset edu.byu.absorb-api-test {
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
       logit = acct.klog("acct")
       obj = acct.isnull() => null |
-            acct.put("departmentId",event:attrs{"departmentId"}.get("a_id"))
-                .put("activeStatus",0)
+            acct.put("DepartmentId",event:attrs{"departmentId"}.get("a_id"))
+                .put("ActiveStatus",0)
     }
     if obj then absorb:users_upload(obj) setting(response)
     fired {
