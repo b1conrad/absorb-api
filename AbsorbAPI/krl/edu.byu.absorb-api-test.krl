@@ -108,11 +108,12 @@ ruleset edu.byu.absorb-api-test {
     select when absorb_api_test account_may_need_updating
       username re#(.+)# setting(username)
     pre {
+      department = event:attrs{"departmentId"}.decode()
       accts = absorb:users(username)
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
       logit = acct.klog("acct")
       obj = acct.isnull() => null |
-            acct.put("DepartmentId",event:attrs{"departmentId"}.get("a_id"))
+            acct.put("DepartmentId",department.get("a_id"))
                 .put("ActiveStatus",0)
     }
     if obj then absorb:users_upload(obj) setting(response)
@@ -126,11 +127,12 @@ ruleset edu.byu.absorb-api-test {
       gender re#([FM])$#
       setting(username,sex)
     pre {
+      department = event:attrs{"departmentId"}.decode()
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
       accts = absorb:users(username)
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
       obj = acct => null |
-        event:attrs.put("departmentId",event:attrs{"departmentId"}.get("a_id"))
+        event:attrs.put("departmentId",department.get("a_id"))
                    .put("gender",gender)
                    .put("password","ChangeMe")
                    .delete("id")
