@@ -46,7 +46,7 @@ ruleset edu.byu.absorb-api-test {
       raise com_absorb_sdk event "tokenNeeded"
     }
   }
-  rule createNewAccountFromHiredEvent {
+  rule createNewAccountManually { // manual use through Testing tab
     select when absorb_api_test new_hire
       username re#^([a-z][a-z0-9]{1,7})$#
       departmentId re#^(\d{4})$#
@@ -80,6 +80,28 @@ ruleset edu.byu.absorb-api-test {
     if departmentId then absorb:users_upload(body) setting(response)
     fired {
       raise absorb_api_test event "account_added" attributes response
+    }
+  }
+  rule createOrAdjustAccount {
+    select when absorb_api_test account_requested
+    every {
+      event:send({
+        "eci":meta:eci,
+        "domain":"com_absorb_sdk",
+        "type":"token_check_needed",
+      })
+      event:send({
+        "eci":meta:eci,
+        "domain":event_domain,
+        "type":"account_may_need_updating",
+        "attrs":event:attrs,
+      })
+      event:send({
+        "eci":meta:eci,
+        "domain":event_domain,
+        "type":"account_may_need_creating",
+        "attrs":event:attrs,
+      })
     }
   }
 }
