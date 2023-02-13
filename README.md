@@ -41,3 +41,7 @@ Upon receiving the `Hired` event for someone not yet in the Absorb system, we wi
 
 We will depend on the existing batch (early weekday mornings) to "true up" or reconcile.
 This will also take care of removing accounts for terminated employees, so we will ignore the `Terminated` events.
+
+The [exact departments and their codes](https://docs.google.com/spreadsheets/d/1uL1bRX6fhDyX1_V8XuHj9cme11fArdkgnIg_h9YH--Y/edit?usp=sharing)
+are available.
+
