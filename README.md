@@ -45,3 +45,4 @@ This will also take care of removing accounts for terminated employees, so we wi
 The [exact departments and their codes](https://docs.google.com/spreadsheets/d/1uL1bRX6fhDyX1_V8XuHj9cme11fArdkgnIg_h9YH--Y/edit?usp=sharing)
 are available.
 
+As of today, February 14, 2023 at 14:00 we are beta testing the complete proof of concept for selected departments.
