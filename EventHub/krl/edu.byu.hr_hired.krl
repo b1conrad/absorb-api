@@ -7,7 +7,6 @@ ruleset edu.byu.hr_hired {
     shares eh_subscriptions, eh_events, index, export, person, forward, import
 , getNewUserAccount
 , getExistingUserAccount
-, relOutflows
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -84,7 +83,7 @@ latest events.<br/>
     getNewUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
-      eci = rel:established().head().get("Tx")
+      eci = relOutflows().head().get("Tx")
       dept = ent:doi >< dept_id => ent:doi{dept_id}
                                  | wrangler:picoQuery(
                                      eci,
@@ -123,7 +122,7 @@ latest events.<br/>
     getExistingUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       net_id = e{["event_body","net_id"]}
-      eci = rel:established().head().get("Tx")
+      eci = relOutflows().head().get("Tx")
       accts = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getUsers",{"net_id":net_id})
 .klog("accts")
       acct = accts.typeof()=="Array" && accts.length() => accts.head() | null
@@ -401,7 +400,7 @@ input.wide90 {
     pre {
       code = event:attrs{"code"}
       name = event:attrs{"name"}
-      eci = rel:established().head().get("Tx")
+      eci = relOutflows().head().get("Tx")
       dept = wrangler:picoQuery(eci,"edu.byu.absorb-api-test","getDepartments",{"id":code}).head()
       entry = {"code":code,"name":name,"a_id":dept{"Id"}}
     }
@@ -415,7 +414,7 @@ input.wide90 {
       event = event:attr("event")
       event_id = event{["event_header","event_id"]}
       nua = getNewUserAccount(event_id)
-      eci = rel:established().head().get("Tx")
+      eci = relOutflows().head().get("Tx")
     }
     if eci && nua{"externalId"} && nua{"username"} then
       event:send({
