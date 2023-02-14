@@ -383,6 +383,12 @@ input.wide90 {
     }
     if referrer then send_directive("_redirect",{"url":referrer})
   }
+  rule prepareForDepartmentsImport {
+    select when edu_byu_hr_hired import_data_available
+    fired {
+      ent:doi := {}
+    }
+  }
   rule importDepartmentsOfInterest {
     select when edu_byu_hr_hired import_data_available
     foreach event:attrs{"import_data"}.split(newline) setting(line)
@@ -405,7 +411,7 @@ input.wide90 {
       entry = {"code":code,"name":name,"a_id":dept{"Id"}}
     }
     fired {
-      ent:doi := ent:doi.defaultsTo({}).put(code,entry)
+      ent:doi{code} := entry
     }
   }
   rule createNewAbsorbAccount {
