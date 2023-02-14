@@ -233,7 +233,7 @@ input.wide90 {
     newline = (13.chr() + "?" + 10.chr()).as("RegExp")
     import = function(){
       base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
-      html:header("Import")
+      html:header("Import",styles)
       + <<<h1>Import</h1>
 <table>
 <tr>
@@ -251,7 +251,7 @@ input.wide90 {
 }).join("")}</table>
 <form action="#{base_url}/import_data_available">
 <textarea name="import_data"></textarea>
-<button type="submit">Submit</button>
+<button type="submit">Replace</button>
 </form>
 >>
       + html:footer()
