@@ -73,3 +73,6 @@ The IICS Absorb updater pico expects a relationship with the Absorb sandbox pico
 
 Repeat the last two sets of steps for a new pico named "Absorb production" using a non-person Net-ID for the "Username", "byu" for the "SubDomain", and the correct GUID for the "PrivateKey"
 
+## Going into production
+
+Delete the relationship between IICS Absorb updater and Absorb sandbox using the Subscriptions tab in either pico.
