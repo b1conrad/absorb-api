@@ -7,6 +7,7 @@ ruleset edu.byu.hr_hired {
     shares eh_subscriptions, eh_events, index, export, person, forward, import
 , getNewUserAccount
 , getExistingUserAccount
+, relOutflows
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -19,6 +20,9 @@ ruleset edu.byu.hr_hired {
       ans_type == "Map" => [answer] |
       ans_type == "Array" => answer |
       null
+    }
+    relOutflows = function(){
+      rel:established("Tx_role","outflow")
     }
     makeMT = function(ts){
       MST = time:add(ts,{"hours": -7});
