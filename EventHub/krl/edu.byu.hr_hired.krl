@@ -235,6 +235,20 @@ input.wide90 {
       base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
       html:header("Import")
       + <<<h1>Import</h1>
+<table>
+<tr>
+<th>code</th>
+<th>name</th>
+<th>a_id</th>
+</tr>
+#{ent:doi.values().map(function(v){
+<<<tr>
+<td>#{v{"code"}}</td>
+<td>#{v{"name"}}</td>
+<td>#{v{"a_id"}}</td>
+</tr>
+>>
+}).join("")}</table>
 <form action="#{base_url}/import_data_available">
 <textarea name="import_data"></textarea>
 <button type="submit">Submit</button>
