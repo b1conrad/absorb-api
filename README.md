@@ -46,3 +46,9 @@ The [exact departments and their codes](https://docs.google.com/spreadsheets/d/1
 are available.
 
 As of today, February 14, 2023 at 14:00 we are beta testing the complete proof of concept for selected departments.
+
+### External documentation
+
+See slide deck [IICS Absorb updater](https://docs.google.com/presentation/d/1lcHs1FLFqN0vCFG_eXpFHKJ-VFlvLoAyx5CT4ph1mWM/edit?usp=sharing).
+
+Non-person ID is 617556178 with Net-ID b4cf28d2.
