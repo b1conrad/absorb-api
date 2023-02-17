@@ -237,12 +237,14 @@ input.wide90 {
       + <<<h1>Import</h1>
 <table>
 <tr>
+<th>№</th>
 <th>code</th>
 <th>name</th>
 <th>a_id</th>
 </tr>
-#{ent:doi.values().map(function(v){
+#{ent:doi.values().map(function(v,i){
 <<<tr>
+<td>#{i+1}</td>
 <td>#{v{"code"}}</td>
 <td>#{v{"name"}}</td>
 <td>#{v{"a_id"}}</td>
@@ -387,16 +389,6 @@ input.wide90 {
       })
     }
   }
-  rule redirectBack {
-    select when edu_byu_hr_hired ack
-             or edu_byu_hr_hired prune
-             or edu_byu_hr_hired new_forward
-             or edu_byu_hr_hired new_account
-    pre {
-      referrer = event:attr("_headers").get("referer") // sic
-    }
-    if referrer then send_directive("_redirect",{"url":referrer})
-  }
   rule prepareForDepartmentsImport {
     select when edu_byu_hr_hired import_data_available
     fired {
@@ -427,6 +419,17 @@ input.wide90 {
     fired {
       ent:doi{code} := entry
     }
+  }
+  rule redirectBack {
+    select when edu_byu_hr_hired ack
+             or edu_byu_hr_hired prune
+             or edu_byu_hr_hired new_forward
+             or edu_byu_hr_hired new_account
+             or edu_byu_hr_hired import_data_available
+    pre {
+      referrer = event:attr("_headers").get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
   rule createNewAbsorbAccount {
     select when edu_byu_hr_hired new_hire_of_interest
