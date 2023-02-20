@@ -21,7 +21,7 @@ Configuration is expressed in a JSON string, like _one_ of these (redacted):
 
 This identifies:
 - `SubDomain`: which `.myabsorb.com` instance the ruleset will support API calls for
-- `Username`: the Net-ID of the admin account to be used
+- `Username`: the Absorb username of the admin account to be used (at BYU it is a Net-ID)
 - `Password`: the Absorb account password of that admin account
 - `PrivateKey`: a GUID assigned by Absorb for use of the API in that instance
 
@@ -30,7 +30,7 @@ This identifies:
 None
 
 ### web pages 
-com
+
 None
 
 ### functions shared
@@ -45,12 +45,18 @@ providing the DOMAIN hosting the pico engine, the ECI, the NAME of the shared fu
 - `latestResponse`, HTTP response from the latest attempt to generate a token
 - `theToken`, the access token most recently generated
 - `tokenValid`, `true` or `false`, the latest token has not yet expired
-- `departments`, given `id` a BYU department code (four digit number), an array of Absorb department objects (wraps the `departments?ExternalId=` API
-- `users`, given `username` a BYU Net-ID, an array of Absorb user objects (wraps the `users?username=` API
+- `departments`, given `id` (a BYU department code (four digit number)), an array of Absorb department objects (wraps the `departments?ExternalId=` API)
+- `users`, given `username` (a BYU Net-ID), an array of Absorb user objects (wraps the Absorb `users?username=` API)
 
 ### functions and actions provided
 
-`tokenValid`, `users`, `department`, `departments`, `users_upload`
+Provided functions and actions can be used in another ruleset that uses this one as a module.
+
+- `tokenValid`, `true` or `false`, the latest token has not yet expired
+- `users`, given `username` (a BYU Net-ID), an array of Absorb user objects (wraps the Absorb `users?username=` API)
+- `department`, given `id` (an Absorb department id (a GUID)), an Absorb department object (wraps the `departments/:id` API)
+- `departments`, given `id` (a BYU department code (four digit number)), an array of Absorb department objects (wraps the `departments?ExternalId=` API)
+- `users_upload`, an action which given a user object, upserts the Absorb user (wraps the `users/upload?Key=0` API)
 
 ### salient events
 
@@ -72,10 +78,10 @@ None
 
 ### functions shared
 
-`tokenValid`,
-`getDepartments`,
-`getUsers`,
-`getDepartmentById`
+`tokenValid`, `true` or `false`, the latest token has not yet expired (wraps the function of the same name provided by the SDK)
+`getDepartments`, given `id` (a BYU department code (four digit number)), an array of Absorb department objects (wraps the SDK `departments`)
+`getUsers`, given `username` (a BYU Net-ID), an array of Absorb user objects (wraps the SDK `users`)
+`getDepartmentById`, given `id` (an Absorb department id (a GUID)), an Absorb department object (wraps the SDK `department`)
 
 ### functions and actions provided
 
