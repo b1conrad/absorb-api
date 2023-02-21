@@ -73,7 +73,7 @@ ruleset edu.byu.hr_hired {
 <a href="export.txt" target="_blank">export</a>
 <form action="#{prune_it}">
 Prune keeping
-<input type="number" name="keeping" min="0" max="#{last}" required>
+<input type="number" name="keeping" min="0" max="#{last}" required value="0">
 latest events.<br/>
 <button type="submit">prune</button>
 </form>
