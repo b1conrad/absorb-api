@@ -75,7 +75,7 @@ ruleset edu.byu.hr_hired {
 Prune keeping
 <input type="number" name="keeping" min="0" max="#{last}" required value="0">
 latest events.<br/>
-<button type="submit">prune</button>
+<button type="submit" disabled>prune</button>
 </form>
 >>
       + html:footer()
