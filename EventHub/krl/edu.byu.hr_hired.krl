@@ -314,6 +314,14 @@ input.wide90 {
       })
     }
   }
+  rule externalFollowUp {
+    select when edu_byu_hr_hired hired_event_received
+    foreach ent:forward.values() setting(fwd)
+    http:post(url=fwd{"url"},json=event:attrs,autosend={
+      "eci":meta:eci,"domain":rs_event_domain,
+      "type":"post_response","name":"post_response"
+    })
+  }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
     pre {
