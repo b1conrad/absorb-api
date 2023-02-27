@@ -318,7 +318,7 @@ input.wide90 {
     select when edu_byu_hr_hired hired_event_received
     foreach ent:forward.values() setting(fwd)
     http:post(url=fwd{"url"},json=event:attrs,autosend={
-      "eci":meta:eci,"domain":rs_event_domain,
+      "eci":meta:eci,"domain":"HR_Personal_Action",
       "type":"post_response","name":"post_response"
     })
   }
