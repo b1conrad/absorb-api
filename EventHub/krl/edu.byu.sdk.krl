@@ -14,7 +14,7 @@ ruleset edu.byu.sdk {
     ClientSecret = meta:rulesetConfig{"ClientSecret"}
     api_url = "https://api.byu.edu/"
     tokenValid = function(){
-      tokenTime = ent:issued || ent:valid
+      tokenTime = ent:issued
       ttl = ent:token{"expires_in"} - 60 // with a minute to spare
       expiredTime = time:add(tokenTime,{"seconds":ttl})
 .klog("expiredTime")
@@ -70,7 +70,6 @@ ruleset edu.byu.sdk {
       ent:token := response{"status_code"}==200 => response{"content"}.decode()
                                                  | null
       ent:issued := time:now()
-      clear ent:valid
     }
   }
   rule checkIfTokenNeeded {
