@@ -7,6 +7,7 @@ ruleset edu.byu.hr_hired {
     shares eh_subscriptions, eh_events, index, export, person, forward, import
 , getNewUserAccount
 , getExistingUserAccount
+, getPerson
   }
   global {
     rs_event_domain = "edu_byu_hr_hired"
@@ -80,6 +81,9 @@ latest events.<br/>
 >>
       + html:footer()
     }
+    getPerson = function(byu_id){
+      sdk:persons(byu_id)
+    }
     getNewUserAccount = function(event_id){
       e = ent:hr_events{event_id}
       dept_id = e{["filters","filter","filter_value"]}
@@ -92,8 +96,10 @@ latest events.<br/>
                                      {"id":dept_id}
                                    ).head()
       id = e{["event_body","byu_id"]}
-      content = sdk:persons(id)
+      content = getPerson(id)
       basic = content{"basic"}
+      netid = basic{["net_id","value"]}
+      sanity = netid == e{["event_body","net_id"]}
       emailKeys = [
         "byu_internal_email",
         "personal_email_address",
@@ -101,10 +107,10 @@ latest events.<br/>
       ]
       emailAddress = emailKeys.reduce(function(a,k){
           a => a | basic{[k,"value"]}
-        },"")
+        },"") || netid + "@byu.edu"
       obj = {
         "id": "",
-        "username": basic{["net_id","value"]},
+        "username": netid,
         "departmentId": dept.encode() || "@" + dept_id,
         "firstName": basic{["preferred_first_name","value"]},
         "lastName": basic{["preferred_surname","value"]},
