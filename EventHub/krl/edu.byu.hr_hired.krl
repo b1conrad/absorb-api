@@ -101,14 +101,10 @@ latest events.<br/>
       basic = content{"basic"}
       netid = basic{["net_id","value"]}
       sanity = netid == e{["event_body","net_id"]}
-      emailKeys = [
-        "byu_internal_email",
-        "personal_email_address",
-        "student_email_address",
-      ]
-      emailAddress = emailKeys.reduce(function(a,k){
-          a => a | basic{[k,"value"]}
-        },"") || netid + "@byu.edu"
+      emailAddress = basic{["byu_internal_email","value"]}
+                  || basic{["personal_email_address","value"]}
+                  || basic{["student_email_address","value"]}
+                  || netid + "@byu.edu"
       obj = {
         "id": "",
         "username": netid,
