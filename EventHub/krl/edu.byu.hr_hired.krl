@@ -219,13 +219,14 @@ input.wide90 {
       html:header("Forwarding",styles)
       + <<<h1>Forwarding</h1>
 <table>
-<tr><th>name</th><th>url</th><th></th></tr>
+<tr><th>name</th><th>url</th><th>count</th><th>op</th></tr>
 #{ent:forward.values().map(function(v){
-<<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{delr(v)}</td></tr>
+<<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{v{"count"}}</td><td>#{delr(v)}</td></tr>
 >>}).join("")}
 <tr>
 <td><input onchange="#{js1("name")}" required placeholder="name"></td>
 <td><input onchange="#{js1("url")}" required class="wide90" placeholder="url"></td>
+<td></td>
 <td><button onclick="#{js2()}">add</button></td>
 </td></tr>
 </table>
@@ -322,7 +323,7 @@ input.wide90 {
   }
   rule externalFollowUp {
     select when edu_byu_hr_hired hired_event_received
-    foreach ent:forward.values() setting(fwd)
+    foreach ent:forward.values() setting(fwd,name)
     http:post(url=fwd{"url"},json=event:attrs,autosend={
       "eci":meta:eci,"domain":"HR_Personal_Action",
       "type":"post_response","name":"post_response"
