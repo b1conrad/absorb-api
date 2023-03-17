@@ -4,7 +4,8 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export, person, forward, import
+    shares eh_subscriptions, eh_events, index, export, person, forward, import,
+      forward_detail
 , getNewUserAccount
 , getExistingUserAccount
 , getPerson
@@ -245,6 +246,12 @@ input.wide90 {
 <input id="forward_name" name="name" type="hidden">
 <input id="forward_url" name="url" type="hidden">
 </form>
+>>
+      + html:footer()
+    }
+    forward_detail = function(name){
+      html:header(name)
+      + <<<h1>#{name}</h1>
 >>
       + html:footer()
     }
