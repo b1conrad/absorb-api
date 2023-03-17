@@ -323,11 +323,17 @@ input.wide90 {
   }
   rule externalFollowUp {
     select when edu_byu_hr_hired hired_event_received
-    foreach ent:forward.values() setting(fwd,name)
+    foreach ent:forward setting(fwd,name)
+    pre {
+      fwd_count = fwd{"count"}.defaultsTo(0)
+    }
     http:post(url=fwd{"url"},json=event:attrs,autosend={
       "eci":meta:eci,"domain":"HR_Personal_Action",
       "type":"post_response","name":"post_response"
     })
+    fired {
+      ent:forward{[name,"count"]} := fwd_count + 1
+    }
   }
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
@@ -366,7 +372,7 @@ input.wide90 {
       url re#(.+)#
       setting(name,url)
     pre {
-      entry = {"name":name,"url":url}
+      entry = {"name":name,"url":url,"count":0}
     }
     fired {
       ent:forward := ent:forward.defaultsTo({}).put(name,entry)
