@@ -347,34 +347,15 @@ input.wide90 {
     foreach ent:forward setting(fwd,name)
     pre {
       fwd_url = fwd{"url"}
-      txnId = meta:txnId
       fwd_count = fwd{"count"}.defaultsTo(0)
     }
     if fwd_url then
       http:post(url=fwd_url,json=event:attrs,autosend={
         "eci":meta:eci,"domain":"HR_Personal_Action",
         "type":"post_response","name":"post_response",
-        "attrs":{"_txnId":txnId}
       })
     fired {
       ent:forward{[name,"count"]} := fwd_count + 1
-      ent:correlate{txnId} := name
-    }
-  }
-  rule saveResponse {
-    select when HR_Personal_Action post_response
-    pre {
-      post_txnId = event:attrs{"_txnId"}
-      name = ent:correlate{post_txnId}
-      response = event:attrs.delete("_txnId")
-      responses = ent:forward_response{name}.defaultsTo([]).append(response)
-    }
-    if ent:forward >< name then noop()
-    fired {
-      ent:forward_response{name} := responses
-    }
-    finally {
-      clear ent:correlate{post_txnId}
     }
   }
   rule initialize {
