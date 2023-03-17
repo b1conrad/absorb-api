@@ -219,9 +219,19 @@ input.wide90 {
       html:header("Forwarding",styles)
       + <<<h1>Forwarding</h1>
 <table>
-<tr><th>name</th><th>url</th><th>count</th><th>op</th></tr>
+<tr>
+<th>name</th>
+<th>url</th>
+<th>count</th>
+<th>op</th>
+</tr>
 #{ent:forward.values().map(function(v){
-<<<tr><td>#{v{"name"}}</td><td>#{v{"url"}}</td><td>#{v{"count"}}</td><td>#{delr(v)}</td></tr>
+<<<tr>
+<td>#{v{"name"}}</td>
+<td>#{v{"url"}}</td>
+<td>#{v{"count"}}</td>
+<td>#{delr(v)}</td>
+</tr>
 >>}).join("")}
 <tr>
 <td><input onchange="#{js1("name")}" required placeholder="name"></td>
