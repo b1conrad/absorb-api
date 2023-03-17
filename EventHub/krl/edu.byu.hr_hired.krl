@@ -239,8 +239,8 @@ input.wide90 {
     newline = (13.chr() + "?" + 10.chr()).as("RegExp")
     import = function(){
       base_url = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}>>
-      html:header("Import",styles)
-      + <<<h1>Import</h1>
+      html:header("Departments of interest",styles)
+      + <<<h1>Departments of interest</h1>
 <table>
 <tr>
 <th>№</th>
