@@ -1,6 +1,7 @@
 ruleset edu.byu.forwardee {
   meta {
     use module html
+    use module io.picolabs.wrangler alias wrangler
     shares url, since, detail
   }
   global {
