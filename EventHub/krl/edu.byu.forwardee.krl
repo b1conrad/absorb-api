@@ -2,7 +2,7 @@ ruleset edu.byu.forwardee {
   meta {
     use module html
     use module io.picolabs.wrangler alias wrangler
-    shares url, since, detail
+    shares eci, url, since, detail
   }
   global {
     url = function(){ent:url}
@@ -14,6 +14,10 @@ ruleset edu.byu.forwardee {
       + html:footer()
     }
     rs_event_domain = "edu_byu_forwardee"
+    tags = [rs_event_domain,"ui","forward"]
+    eci = function(){
+      wrangler:channels(tags).head().get("id")
+    }
   }
   rule acceptNewURL {
     select when edu_byu_forwardee newURL
@@ -26,7 +30,6 @@ ruleset edu.byu.forwardee {
   rule initialize {
     select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
     pre {
-      tags = [rs_event_domain,"ui","forward"]
       chan = wrangler:channels(tags).head()
     }
     if chan.isnull() then
@@ -35,5 +38,8 @@ ruleset edu.byu.forwardee {
         {"allow":[{"domain":rs_event_domain,"name":"*"}],"deny":[]},
         {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
       )
+    always {
+      ent:name := wrangler:myself(){"name"}
+    }
   }
 }
