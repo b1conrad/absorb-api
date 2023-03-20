@@ -219,7 +219,6 @@ input.wide90 {
 <tr>
   <th>name</th>
   <th>url</th>
-  <th>count</th>
   <th>op</th>
 </tr>
 #{wrangler:children().map(function(v){
@@ -228,8 +227,9 @@ input.wide90 {
   child_eci = wrangler:picoQuery(v{"eci"},child_rid,"eci")
   detail_url = <<#{meta:host}/c/#{child_eci}/query/#{child_rid}/detail.html>>
   <<<tr>
-  <td><a href="#{detail_url}">#{v{"name"}}</a></td>
+  <td><a href="#{detail_url}" target="_blank">#{v{"name"}}</a></td>
   <td>#{child_url}</td>
+  <td>del</td>
 </tr>
 >>}).join("")}
 </table>
