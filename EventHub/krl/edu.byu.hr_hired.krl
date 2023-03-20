@@ -222,6 +222,24 @@ input.wide90 {
   <th>count</th>
   <th>op</th>
 </tr>
+#{wrangler:children().map(function(v){
+  child_rid = "edu.byu.forwardee"
+  child_url = wrangler:picoQuery(v{"eci"},child_rid,"url")
+  child_eci = wrangler:picoQuery(v{"eci"},child_rid,"eci")
+  detail_url = <<#{meta:host}/c/#{child_eci}/#{child_rid}/detail.html>>
+  <<<tr>
+  <td><a href="#{detail_url}">#{v{"name"}}</a></td>
+  <td>#{child_url}</td>
+</tr>
+>>}).join("")}
+</table>
+<table>
+<tr>
+  <th>name</th>
+  <th>url</th>
+  <th>count</th>
+  <th>op</th>
+</tr>
 #{ent:forward.values().map(function(v){
   name = v{"name"} // should be URL component encoded
   <<<tr>
