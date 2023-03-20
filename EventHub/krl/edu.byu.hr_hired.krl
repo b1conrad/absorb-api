@@ -226,7 +226,7 @@ input.wide90 {
   child_rid = "edu.byu.forwardee"
   child_url = wrangler:picoQuery(v{"eci"},child_rid,"url")
   child_eci = wrangler:picoQuery(v{"eci"},child_rid,"eci")
-  detail_url = <<#{meta:host}/c/#{child_eci}/#{child_rid}/detail.html>>
+  detail_url = <<#{meta:host}/c/#{child_eci}/query/#{child_rid}/detail.html>>
   <<<tr>
   <td><a href="#{detail_url}">#{v{"name"}}</a></td>
   <td>#{child_url}</td>
