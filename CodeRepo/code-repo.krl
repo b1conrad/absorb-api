@@ -12,7 +12,7 @@ ruleset code-repo {
   }
   rule stashCode {
     select when code_repo new_ruleset
-      rid re#(^\w[\w\d-]+)$# setting(rid)
+      rid re#(^\w[\w\d-.]+)$# setting(rid)
     fired {
       ent:code{rid} := event:attrs{"krl"}
     }
