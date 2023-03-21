@@ -13,6 +13,8 @@ ruleset edu.byu.forwardee {
 <p>URL: #{ent:url}</p>
 <p>Since: #{ent:since.makeMT().ts_format()}</p>
 <p>Count: #{ent:fwd_count}</p>
+<p>Events forwarded: #{ent:eid_list.length()}</p>
+<p>Responses cached: #{ent:res_list.length()}</p>
 >>
       + html:footer()
     }
@@ -32,6 +34,7 @@ ruleset edu.byu.forwardee {
       parts = ts.split(re#[T.]#)
       parts.filter(function(v,i){i<2}).join(" ")
     }
+    cache_limit = 50
   }
   rule acceptNewURL {
     select when edu_byu_forwardee newURL
@@ -60,6 +63,10 @@ ruleset edu.byu.forwardee {
     select when HR_Personal_Action Hired
     pre {
       fwd_count = ent:fwd_count.defaultsTo(0)
+      event = event:attrs{"event"}
+      event_id = event{["event_header","event_id"]}
+      eid_list = ent:eid_list.defaultsTo([]).append(event_id)
+      prune = eid_list.length() > cache_limit
     }
     if ent:url then
       http:post(url=ent:url,json=event:attrs,autosend={
@@ -68,6 +75,17 @@ ruleset edu.byu.forwardee {
       })
     fired {
       ent:fwd_count := fwd_count + 1
+      ent:eid_list := prune => eid_list.tail() | eid_list
+    }
+  }
+  rule cacheRecentResponses {
+    select when edu_byu_forwardee post_response
+    pre {
+      res_list = ent:res_list.defaultsTo([]).append(event:attrs)
+      prune = res_list.length() > cache_limit
+    }
+    fired {
+      ent:res_list := prune => res_list.tail() | res_list
     }
   }
 }
