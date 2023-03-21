@@ -15,6 +15,17 @@ ruleset edu.byu.forwardee {
 <p>Count: #{ent:fwd_count}</p>
 <p>Events forwarded: #{ent:eid_list.length()}</p>
 <p>Responses cached: #{ent:res_list.length()}</p>
+<table>
+<tr>
+<th>Event ID</th>
+<th>Response</th>
+</tr>
+#{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
+  <<<tr>
+  <td>#{eid}</td>
+  <td><pre>#{res}</pre></td>
+</tr>
+>>}).join("")}</table>
 >>
       + html:footer()
     }
