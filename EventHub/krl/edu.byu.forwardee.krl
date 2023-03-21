@@ -16,6 +16,10 @@ td, th {
   border: 1px solid black;
   padding: 5px;
 }
+pre {
+  max-width: 80em;
+  white-space: pre-wrap;
+}
 </style>
 >>
     detail = function(){
@@ -33,7 +37,7 @@ td, th {
 </tr>
 #{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
   <<<tr>
-  <td>#{eid}</td>
+  <td title="#{eid}">#{eid.substr(0,7)}…</td>
   <td><pre>#{res.encode()}</pre></td>
 </tr>
 >>}).join("")}</table>
