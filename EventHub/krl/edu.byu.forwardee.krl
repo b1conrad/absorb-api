@@ -38,9 +38,10 @@ pre {
 </tr>
 #{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
   status = res.get("status_code")
+  message = res.get("status_line")
   <<<tr>
   <td title="#{eid}">#{eid.substr(0,7)}…</td>
-  <td><pre>#{status || "N/A"}</pre></td>
+  <td><pre>#{status => status + NL + message | "N/A"}</pre></td>
   <td><pre>#{res.encode()}</pre></td>
 </tr>
 >>}).join("")}</table>
@@ -64,6 +65,7 @@ pre {
       parts.filter(function(v,i){i<2}).join(" ")
     }
     cache_limit = 50
+    NL = chr(10)
   }
   rule acceptNewURL {
     select when edu_byu_forwardee newURL
