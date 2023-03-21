@@ -10,6 +10,8 @@ ruleset edu.byu.forwardee {
     detail = function(){
       html:header(ent:name)
       + <<<h1>#{ent:name}</h1>
+<p>URL: #{ent:url}</p>
+<p>Count: #{ent:fwd_count}</p>
 >>
       + html:footer()
     }
@@ -40,6 +42,20 @@ ruleset edu.byu.forwardee {
       )
     always {
       ent:name := wrangler:myself(){"name"}
+    }
+  }
+  rule forwardHiredEvent {
+    select when HR_Personal_Action Hired
+    pre {
+      fwd_count = ent:fwd_count.defaultsTo(0)
+    }
+    if ent:url then
+      http:post(url=ent:url,json=event:attrs,autosend={
+        "eci":eci(),"domain":rs_event_domain,
+        "type":"post_response","name":"post_response",
+      })
+    fired {
+      ent:fwd_count := fwd_count + 1
     }
   }
 }
