@@ -11,6 +11,7 @@ ruleset edu.byu.forwardee {
       html:header(ent:name)
       + <<<h1>#{ent:name}</h1>
 <p>URL: #{ent:url}</p>
+<p>Since: #{ent:since}</p>
 <p>Count: #{ent:fwd_count}</p>
 >>
       + html:footer()
@@ -42,6 +43,7 @@ ruleset edu.byu.forwardee {
       )
     always {
       ent:name := wrangler:myself(){"name"}
+      ent:fwd_count := 325
     }
   }
   rule forwardHiredEvent {
