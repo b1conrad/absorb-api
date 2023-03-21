@@ -23,7 +23,7 @@ We will need to learn how to use the Absorb API to create accounts for people wh
 ## Strategy
 
 ### Prime directive
-Take us as little time as possible from engineers working on Project Granite.
+Take as little time as possible from engineers working on Project Granite.
 
 ### Depend on existing integration for reconciliation
 
