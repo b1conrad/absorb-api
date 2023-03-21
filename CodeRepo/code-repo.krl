@@ -5,10 +5,13 @@ ruleset code-repo {
   }
   global {
     code = function(rid){
-      ent:code.get(rid) || "ruleset "+rid+" {}"
+      ent:code >< rid      => ent:code.get(rid) |
+      rid.match(valid_rid) => "ruleset "+rid+" {}" |
+                              ""
     }
     tags = ["code-repo"]
     rs_event_domain = "code_repo"
+    valid_rid = re#(^\w[\w\d-.]+)$#
   }
   rule stashCode {
     select when code_repo new_ruleset
