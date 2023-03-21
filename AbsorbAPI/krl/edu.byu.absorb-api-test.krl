@@ -54,7 +54,7 @@ ruleset edu.byu.absorb-api-test {
       lastName re#(.+)#
       emailAddress re#(.+)# // more permissive than API
       externalId re#^(\d{9})$#
-      gender re#^([FM])$#
+      gender re#^([FM?])$#
       setting(username,dept_id,firstName,lastName,emailAddress,externalId,sex)
     pre {
       gender = sex=="F" => 2 | sex=="M" => 1 | 0
@@ -124,7 +124,7 @@ ruleset edu.byu.absorb-api-test {
   rule createAccount {
     select when absorb_api_test account_may_need_creating
       username re#(.+)#
-      gender re#([FM])$#
+      gender re#([FM?])$#
       setting(username,sex)
     pre {
       department = event:attrs{"departmentId"}.decode()
