@@ -33,11 +33,14 @@ pre {
 <table>
 <tr>
 <th>Event ID</th>
+<th>Status</th>
 <th>Response</th>
 </tr>
 #{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
+  status = res.get("status_code")
   <<<tr>
   <td title="#{eid}">#{eid.substr(0,7)}…</td>
+  <td><pre>#{status || "N/A"}</pre></td>
   <td><pre>#{res.encode()}</pre></td>
 </tr>
 >>}).join("")}</table>
