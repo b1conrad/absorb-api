@@ -7,8 +7,19 @@ ruleset edu.byu.forwardee {
   global {
     url = function(){ent:url}
     since = function(){ent:since}
+    styles = <<<style type="text/css">
+table {
+  border: 1px solid black;
+  border-collapse: collapse;
+}
+td, th {
+  border: 1px solid black;
+  padding: 5px;
+}
+</style>
+>>
     detail = function(){
-      html:header(ent:name)
+      html:header(ent:name,styles)
       + <<<h1>#{ent:name}</h1>
 <p>URL: #{ent:url}</p>
 <p>Since: #{ent:since.makeMT().ts_format()}</p>
@@ -23,7 +34,7 @@ ruleset edu.byu.forwardee {
 #{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
   <<<tr>
   <td>#{eid}</td>
-  <td><pre>#{res}</pre></td>
+  <td><pre>#{res.encode()}</pre></td>
 </tr>
 >>}).join("")}</table>
 >>
