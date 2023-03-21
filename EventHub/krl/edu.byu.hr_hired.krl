@@ -222,11 +222,14 @@ input.wide90 {
 </tr>
 #{wrangler:children().map(function(v){
   child_rid = "edu.byu.forwardee"
-  child_url = wrangler:picoQuery(v{"eci"},child_rid,"url")
-  child_eci = wrangler:picoQuery(v{"eci"},child_rid,"eci")
+  has_rid = wrangler:installedRIDs() >< child_rid
+  child_url = has_rid => wrangler:picoQuery(v{"eci"},child_rid,"url")
+                       | "N/A"
+  child_eci = has_rid => wrangler:picoQuery(v{"eci"},child_rid,"eci")
+                       | null
   detail_url = <<#{meta:host}/c/#{child_eci}/query/#{child_rid}/detail.html>>
   <<<tr>
-  <td><a href="#{detail_url}" target="_blank">#{v{"name"}}</a></td>
+  <td><a href="#{detail_url}" target="_blank"#{has_rid => "" | " disabled"}>#{v{"name"}}</a></td>
   <td>#{child_url}</td>
   <td>del</td>
 </tr>
