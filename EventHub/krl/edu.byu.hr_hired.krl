@@ -4,8 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export, person, forward, import,
-      forward_detail
+    shares eh_subscriptions, eh_events, index, export, person, forward, import
 , getNewUserAccount
 , getExistingUserAccount
 , getPerson
@@ -243,7 +242,7 @@ input.wide90 {
 #{ent:forward.values().map(function(v){
   name = v{"name"} // should be URL component encoded
   <<<tr>
-  <td><a href="forward_detail.html?name=#{name}">#{name}</a></td>
+  <td>#{name}</td>
   <td>#{v{"url"}}</td>
   <td>#{v{"count"}}</td>
   <td>#{delr(v)}</td>
@@ -260,15 +259,6 @@ input.wide90 {
 <input id="forward_name" name="name" type="hidden">
 <input id="forward_url" name="url" type="hidden">
 </form>
->>
-      + html:footer()
-    }
-    forward_detail = function(name){
-      html:header(name)
-      + <<<h1>#{name}</h1>
-#{ent:forward_response{name}.reverse().map(function(r){
-  <<<pre>#{r}</pre>
->>}).join("")}
 >>
       + html:footer()
     }
