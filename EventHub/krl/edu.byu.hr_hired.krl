@@ -242,13 +242,14 @@ input.wide90 {
 <tr>
 <td><input onchange="#{js1("name")}" required placeholder="name"></td>
 <td><input onchange="#{js1("url")}" required class="wide90" placeholder="url"></td>
-<td><button onclick="#{js2()}">add</button></td>
+<td><button onclick="#{js2()}">add</button><sup>*</sup></td>
 </td></tr>
 </table>
 <form id="forward_form" action="#{url}">
 <input id="forward_name" name="name" type="hidden">
 <input id="forward_url" name="url" type="hidden">
 </form>
+<p><sup>*</sup>This user experience is not fully self-service. Some manual work required.</p>
 >>
       + html:footer()
     }
