@@ -231,27 +231,9 @@ input.wide90 {
   <td>del</td>
 </tr>
 >>}).join("")}
-</table>
-<table>
-<tr>
-  <th>name</th>
-  <th>url</th>
-  <th>count</th>
-  <th>op</th>
-</tr>
-#{ent:forward.values().map(function(v){
-  name = v{"name"} // should be URL component encoded
-  <<<tr>
-  <td>#{name}</td>
-  <td>#{v{"url"}}</td>
-  <td>#{v{"count"}}</td>
-  <td>#{delr(v)}</td>
-</tr>
->>}).join("")}
 <tr>
 <td><input onchange="#{js1("name")}" required placeholder="name"></td>
 <td><input onchange="#{js1("url")}" required class="wide90" placeholder="url"></td>
-<td></td>
 <td><button onclick="#{js2()}">add</button></td>
 </td></tr>
 </table>
@@ -389,27 +371,41 @@ input.wide90 {
       ent:hr_events := kept_events
     }
   }
-  rule addForwarding {
+  rule editOrAddForwarding {
     select when edu_byu_hr_hired forwarding_requested
       name re#(.+)#
-      url re#(.+)#
+      url re#(.*)#
       setting(name,url)
     pre {
-      entry = {"name":name,"url":url,"count":0}
+      pre_existing = wrangler:children().filter(function(c){
+        c{"name"}==name}).head()
+      trimmed_url = url.replace(re#^\s\s*#,"").replace(re#\s\s*$#,"")
     }
+    if pre_existing then
+      event:send({"eci":pre_existing{"eci"},"domain":"edu_byu_forwardee",
+        "type":"newURL","attrs":{"url":trimmed_url}
+      })
     fired {
-      ent:forward := ent:forward.defaultsTo({}).put(name,entry)
-      raise edu_byu_hr_hired event "new_forward" attributes event:attrs
+      raise edu_byu_hr_hired event "new_forward_url" attributes event:attrs
+    } else {
+      raise wrangler event "new_child_request" attributes {
+        "name":name,"backgroundColor":"#FD8328","url":trimmed_url
+      }
     }
   }
   rule stopForwarding {
     select when edu_byu_hr_hired forwarding_deletion_requested
       name re#(.+)#
       setting(name)
-    if ent:forward.keys() >< name then noop()
+    pre {
+      pre_existing = wrangler:children().filter(function(c){
+        c{"name"}==name}).head()
+    }
+    if pre_existing then noop()
     fired {
-      clear ent:forward{name}
-      raise edu_byu_hr_hired event "new_forward" attributes event:attrs
+      raise wrangler event "child_deletion_request" attributes {
+        "eci":pre_existing{"eci"}
+      }
     }
   }
   rule manuallyCreateNewAbsorbAccount {
@@ -467,7 +463,9 @@ input.wide90 {
   rule redirectBack {
     select when edu_byu_hr_hired ack
              or edu_byu_hr_hired prune
-             or edu_byu_hr_hired new_forward
+             or edu_byu_hr_hired new_forward_url
+             or wrangler new_child_created
+             or wrangler child_deleted
              or edu_byu_hr_hired new_account
              or edu_byu_hr_hired import_data_available
     pre {
