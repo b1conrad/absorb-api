@@ -1,5 +1,6 @@
 ruleset code-repo {
   meta {
+    use module io.picolabs.wrangler alias wrangler
     shares code
   }
   global {
