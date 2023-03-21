@@ -222,10 +222,11 @@ input.wide90 {
 </tr>
 #{wrangler:children().map(function(v){
   child_rid = "edu.byu.forwardee"
-  has_rid = wrangler:installedRIDs() >< child_rid
-  child_url = has_rid => wrangler:picoQuery(v{"eci"},child_rid,"url")
+  fam_eci = v{"eci"}
+  has_rid = wrangler:picoQuery(fam_eci,"io.picolabs.wrangler","installedRIDs") >< child_rid
+  child_url = has_rid => wrangler:picoQuery(fam_eci,child_rid,"url")
                        | "N/A"
-  child_eci = has_rid => wrangler:picoQuery(v{"eci"},child_rid,"eci")
+  child_eci = has_rid => wrangler:picoQuery(fam_eci,child_rid,"eci")
                        | null
   detail_url = <<#{meta:host}/c/#{child_eci}/query/#{child_rid}/detail.html>>
   <<<tr>
