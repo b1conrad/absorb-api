@@ -11,7 +11,7 @@ ruleset edu.byu.forwardee {
       html:header(ent:name)
       + <<<h1>#{ent:name}</h1>
 <p>URL: #{ent:url}</p>
-<p>Since: #{ent:since}</p>
+<p>Since: #{ent:since.makeMT().ts_format()}</p>
 <p>Count: #{ent:fwd_count}</p>
 >>
       + html:footer()
@@ -20,6 +20,17 @@ ruleset edu.byu.forwardee {
     tags = [rs_event_domain,"ui","forward"]
     eci = function(){
       wrangler:channels(tags).head().get("id")
+    }
+    makeMT = function(ts){
+      MST = time:add(ts,{"hours": -7});
+      MDT = time:add(ts,{"hours": -6});
+      MDT > "2023-11-05T02" => MST |
+      MST > "2023-03-12T02" => MDT |
+                               MST
+    }
+    ts_format = function(ts){
+      parts = ts.split(re#[T.]#)
+      parts.filter(function(v,i){i<2}).join(" ")
     }
   }
   rule acceptNewURL {
@@ -43,7 +54,6 @@ ruleset edu.byu.forwardee {
       )
     always {
       ent:name := wrangler:myself(){"name"}
-      ent:fwd_count := 325
     }
   }
   rule forwardHiredEvent {
