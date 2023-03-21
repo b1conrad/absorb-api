@@ -234,7 +234,7 @@ input.wide90 {
     <<<a href="#{detail_url}" target="_blank"#{disable}>#{name}</a\>>>
   }
   <<<tr>
-  <td>detr(v{"name"})</td>
+  <td>#{detr(v{"name"})}</td>
   <td>#{child_url}</td>
   <td>#{delr(v)}</td>
 </tr>
