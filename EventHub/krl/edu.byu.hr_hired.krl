@@ -229,10 +229,14 @@ input.wide90 {
   child_eci = has_rid => wrangler:picoQuery(fam_eci,child_rid,"eci")
                        | null
   detail_url = <<#{meta:host}/c/#{child_eci}/query/#{child_rid}/detail.html>>
+  disable = has_rid => "" | " disabled"
+  detr = function(name){
+    <<<a href="#{detail_url}" target="_blank"#{disable}>#{name}</a\>>>
+  }
   <<<tr>
-  <td><a href="#{detail_url}" target="_blank"#{has_rid => "" | " disabled"}>#{v{"name"}}</a></td>
+  <td>detr(v{"name"})</td>
   <td>#{child_url}</td>
-  <td>del</td>
+  <td>#{delr(v)}</td>
 </tr>
 >>}).join("")}
 <tr>
