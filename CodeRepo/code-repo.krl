@@ -5,7 +5,7 @@ ruleset code-repo {
   }
   global {
     code = function(rid){
-      ent:code.get(rid)
+      ent:code.get(rid) || "ruleset "+rid+" {}"
     }
     tags = ["code-repo"]
     rs_event_domain = "code_repo"
