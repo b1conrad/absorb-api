@@ -406,7 +406,7 @@ input.wide90 {
   rule prepareForwardingPico {
     select when wrangler child_initialized
     pre {
-      repo = "http://"+meta:host+"/c/clfism73w05pgy44987t3exf9/query/code-repo/code.txt?rid="
+      repo = meta:host+"/c/clfism73w05pgy44987t3exf9/query/code-repo/code.txt?rid="
       eci = event:attrs{"eci"}
     }
     every {
