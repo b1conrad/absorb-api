@@ -14,11 +14,12 @@ ruleset code-repo {
     rs_event_domain = "code_repo"
     valid_rid = re#(^\w[\w\d-.]+)$#
     repo = function(){
+      base_url = <<#{meta:host}/c/#{meta:eci}/query/#{meta:rid}/code.txt?rid=>>
       html:header("Repo")
       + <<<h1>Repo</h1>
 <ul>
 #{ent:code.map(function(v,k){
-  <<<li>#{k}</li>
+  <<<li>#{k} <a href="#{base_url+k}">raw</a></li>
 >>
 }).values().join("")}</ul>
 >>
