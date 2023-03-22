@@ -20,7 +20,7 @@ ruleset code-repo {
 #{ent:code.map(function(v,k){
   <<<li>#{k}</li>
 >>
-}).join("")}</ul>
+}).values().join("")}</ul>
 >>
       + html:footer()
     }
