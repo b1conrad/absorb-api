@@ -36,10 +36,11 @@ pre {
 <th>Status</th>
 <th>Response</th>
 </tr>
-#{[ent:eid_list,ent:res_list].pairwise(function(eid,res){
-  status = res.get("status_code")
-  message = res.get("status_line")
-  <<<tr>
+#{[ent:eid_list.reverse(),ent:res_list.reverse()]
+  .pairwise(function(eid,res){
+    status = res.get("status_code")
+    message = res.get("status_line")
+    <<<tr>
   <td title="#{eid}">#{eid.substr(0,7)}…</td>
   <td><pre>#{status => status + NL + message | "N/A"}</pre></td>
   <td><pre>#{res.encode()}</pre></td>
