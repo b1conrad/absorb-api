@@ -22,9 +22,11 @@ ruleset code-repo {
   <<<li>#{k} <a href="#{base_url+k}">raw</a></li>
 >>
 }).values().join("")}</ul>
+<h2>Update and edit</h2>
 <form action="#{meta:host}/sky/event/#{meta:eci}/none/code_repo/new_ruleset">
-<input name="rid"><br>
-<textarea name="krl"></textarea>
+<input name="rid" placeholder="rid"><br>
+<textarea name="krl" placeholder="krl"></textarea><br>
+<button type="submit">Submit</button>
 </form>
 >>
       + html:footer()
