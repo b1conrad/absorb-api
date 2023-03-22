@@ -1,7 +1,8 @@
 ruleset code-repo {
   meta {
     use module io.picolabs.wrangler alias wrangler
-    shares code
+    use module html
+    shares code, repo
   }
   global {
     code = function(rid){
@@ -12,6 +13,12 @@ ruleset code-repo {
     tags = ["code-repo"]
     rs_event_domain = "code_repo"
     valid_rid = re#(^\w[\w\d-.]+)$#
+    repo = function(){
+      html:header("Repo")
+      + <<<h1>Repo</h1>
+>>
+      + html:footer()
+    }
   }
   rule stashCode {
     select when code_repo new_ruleset
