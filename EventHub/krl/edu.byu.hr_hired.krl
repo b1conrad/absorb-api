@@ -397,9 +397,10 @@ input.wide90 {
     fired {
       raise edu_byu_hr_hired event "new_forward_url" attributes event:attrs
     } else {
-      raise wrangler event "new_child_request" attributes {
-        "name":name,"backgroundColor":"#FD8328","url":trimmed_url
-      }
+      raise wrangler event "new_child_request"
+        attributes event:attrs.put({
+          "name":name,"backgroundColor":"#FD8328","fwd_url":trimmed_url
+        })
     }
   }
   rule stopForwarding {
@@ -412,9 +413,8 @@ input.wide90 {
     }
     if pre_existing then noop()
     fired {
-      raise wrangler event "child_deletion_request" attributes {
-        "eci":pre_existing{"eci"}
-      }
+      raise wrangler event "child_deletion_request"
+        attributes event:attrs.put({"eci":pre_existing{"eci"}})
     }
   }
   rule manuallyCreateNewAbsorbAccount {
