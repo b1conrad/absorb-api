@@ -37,6 +37,7 @@ ruleset code-repo {
       rid re#(^\w[\w\d-.]+)$# setting(rid)
     fired {
       ent:code{rid} := event:attrs{"krl"}
+      raise code_repo event "code_stashed" attributes event:attrs
     }
   }
   rule initialize {
@@ -50,5 +51,12 @@ ruleset code-repo {
         {"allow":[{"domain":rs_event_domain,"name":"*"}],"deny":[]},
         {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
       )
+  }
+  rule redirectBack {
+    select when code_repo code_stashed
+    pre {
+      referrer = event:attrs{"_headers"}.get("referer") // sic
+    }
+    if referrer then send_directive("_redirect",{"url":referrer})
   }
 }
