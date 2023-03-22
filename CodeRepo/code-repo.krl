@@ -16,6 +16,11 @@ ruleset code-repo {
     repo = function(){
       html:header("Repo")
       + <<<h1>Repo</h1>
+<ul>
+#{ent:code.map(function(v,k){
+  <<<li>#{k}</li>
+>>
+}).join("")}</ul>
 >>
       + html:footer()
     }
