@@ -23,20 +23,22 @@ pre {
 </style>
 >>
     detail = function(){
+      eid_list = ent:eid_list.defaultsTo([])
+      res_list = ent:res_list.defaultsTo([])
       html:header(ent:name,styles)
       + <<<h1>#{ent:name}</h1>
 <p>URL: #{ent:url}</p>
 <p>Since: #{ent:since.makeMT().ts_format()}</p>
 <p>Count: #{ent:fwd_count}</p>
-<p>Events forwarded: #{ent:eid_list.length()}</p>
-<p>Responses cached: #{ent:res_list.length()}</p>
+<p>Events forwarded: #{eid_list.length()}</p>
+<p>Responses cached: #{res_list.length()}</p>
 <table>
 <tr>
 <th>Event ID</th>
 <th>Status</th>
 <th>Response</th>
 </tr>
-#{[ent:eid_list.reverse(),ent:res_list.reverse()]
+#{[eid_list.reverse(),res_list.reverse()]
   .pairwise(function(eid,res){
     status = res.get("status_code")
     message = res.get("status_line")
