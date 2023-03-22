@@ -397,10 +397,28 @@ input.wide90 {
     fired {
       raise edu_byu_hr_hired event "new_forward_url" attributes event:attrs
     } else {
-      raise wrangler event "new_child_request"
-        attributes event:attrs.put({
-          "name":name,"backgroundColor":"#FD8328","fwd_url":trimmed_url
-        })
+      raise wrangler event "new_child_request" attributes
+        event:attrs
+          .delete("url")
+          .put({"name":name,"backgroundColor":"#FD8328","fwd_url":trimmed_url})
+    }
+  }
+  rule prepareForwardingPico {
+    select when wrangler child_initialized
+    pre {
+      repo = "http://"+meta:host+"/c/clfism73w05pgy44987t3exf9/query/code-repo/code.txt?rid="
+      eci = event:attrs{"eci"}
+    }
+    every {
+      event:send({"eci":eci,"domain":"wrangler","type":"install_ruleset_request",
+        "attrs":{"url":repo+"html"}
+      })
+      event:send({"eci":eci,"domain":"wrangler","type":"install_ruleset_request",
+        "attrs":{"url":repo+"edu.byu.forwardee"}
+      })
+      event:send({"eci":eci,"domain":"edu_byu_forwardee","type":"newURL",
+        "attrs":{"url":event:attrs{"fwd_url"}}
+      })
     }
   }
   rule stopForwarding {
