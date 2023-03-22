@@ -19,7 +19,8 @@ ruleset code-repo {
       + <<<h1>Repo</h1>
 <ul>
 #{ent:code.map(function(v,k){
-  <<<li>#{k} <a href="#{base_url+k}" target="_blank">raw</a></li>
+  hash = math:hash("sha256",v)
+  <<<li title="#{hash}">#{k} <a href="#{base_url+k}" target="_blank">raw</a></li>
 >>
 }).values().join("")}</ul>
 <h2>Update and edit</h2>
