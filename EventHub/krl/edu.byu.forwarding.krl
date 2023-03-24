@@ -5,7 +5,7 @@ ruleset edu.byu.forwarding {
     shares forward
   }
   global {
-    rs_event_domain = "edu_byu_hr_hired"
+    rs_event_domain = "edu_byu_forwarding"
     styles = <<<style type="text/css">
 table {
   border: 1px solid black;
@@ -75,22 +75,21 @@ input.wide90 {
       + html:footer()
     }
   }
-/* part of deployment after testing this portion
-  rule externalFollowUp {
-    select when edu_byu_hr_hired hired_event_received
-    foreach wrangler:children() setting(child)
+  rule initialize {
+    select when wrangler ruleset_installed where event:attr("rids") >< meta:rid
     pre {
-      fwd_eci = child{"eci"}
-      fwd_name = child{"name"}.klog("fwd_name")
+      tags = [rs_event_domain,"ui"]
+      chan = wrangler:channels(tags).head()
     }
-    if fwd_eci then
-      event:send({"eci":fwd_eci,"domain":"HR_Personal_Action",
-        "type":"Hired","attrs":event:attrs
-      })
+    if chan.isnull() then
+      wrangler:createChannel(
+        tags,
+        {"allow":[{"domain":rs_event_domain,"name":"*"}],"deny":[]},
+        {"allow":[{"rid":meta:rid,"name":"*"}],"deny":[]}
+      )
   }
-*/
   rule editOrAddForwarding {
-    select when edu_byu_hr_hired forwarding_requested
+    select when edu_byu_forwarding forwarding_requested
       name re#(.+)#
       url re#(.*)#
       setting(name,url)
@@ -104,7 +103,7 @@ input.wide90 {
         "type":"newURL","attrs":{"url":trimmed_url}
       })
     fired {
-      raise edu_byu_hr_hired event "new_forward_url" attributes event:attrs
+      raise edu_byu_forwarding event "new_forward_url" attributes event:attrs
     } else {
       raise wrangler event "new_child_request" attributes
         event:attrs
@@ -131,7 +130,7 @@ input.wide90 {
     }
   }
   rule stopForwarding {
-    select when edu_byu_hr_hired forwarding_deletion_requested
+    select when edu_byu_forwarding forwarding_deletion_requested
       name re#(.+)#
       setting(name)
     pre {
@@ -145,7 +144,7 @@ input.wide90 {
     }
   }
   rule redirectBack {
-    select when edu_byu_hr_hired new_forward_url
+    select when edu_byu_forwarding new_forward_url
              or wrangler new_child_created
              or wrangler child_deleted
     pre {
