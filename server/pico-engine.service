@@ -1,0 +1,10 @@
+[Unit]
+Description=pico-engine
+After=remote-fs.target
+
+[Service]
+User=adm.b1conrad
+Environment="PICO_ENGINE_BASE_URL=http://ubu-test-bruce.byu.edu:3000"
+ExecStart=/usr/local/bin/pico-engine
+Restart=always
+
