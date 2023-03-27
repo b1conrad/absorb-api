@@ -8,7 +8,7 @@ Development and a brief beta test in production will take place on the same mach
 
 We elected to use NodeJS and picos, because of familiarity.
 
-Ultimately, production will be an IICS integration, replacing this proof of concept.
+Ultimately, production will be an full stack integration, replacing this proof of concept.
 
 ## Ubuntu
 
@@ -30,7 +30,7 @@ $ npm ls -g pico-engine
 
 The pico engine is started with this command (after `ssh`ing into the server):
 ```
-$ PICO_ENGINE_BASE_URL=http://ubu-test-bruce.byu.edu:3000 nohup pico-engine &
+$ sudo /usr/bin/systemctl start pico-engine
 ```
 
 ## Picos
