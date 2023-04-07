@@ -41,6 +41,7 @@ ruleset edu.byu.hr_hired {
       prune_it = <<#{meta:host}/sky/event/#{meta:eci}/none/#{rs_event_domain}/prune>>
       html:header("Hired events")
       + <<<h1>Hired events</h1>
+<a href="export.txt" target="_blank">export</a>
 <table>
 <tr>
 <th>№</th>
@@ -71,7 +72,6 @@ ruleset edu.byu.hr_hired {
 <td>#{a_id}</td>
 </tr>
 >>}).values().join("")}</table>
-<a href="export.txt" target="_blank">export</a>
 <form action="#{prune_it}">
 Prune keeping
 <input type="number" name="keeping" min="0" max="#{last}" required value="0">
