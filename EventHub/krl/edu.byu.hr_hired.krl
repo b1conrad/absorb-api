@@ -51,6 +51,7 @@ ruleset edu.byu.hr_hired {
 <th>byu_id</th>
 <th>net_id</th>
 <th>eff_dt</th>
+<th>status</th>
 <th>department</th>
 </tr>
 #{ent:hr_events.values().reverse().map(function(e,i){
@@ -69,6 +70,7 @@ ruleset edu.byu.hr_hired {
 <td><a href="#{url}" target="_blank">#{pid}</a></td>
 <td>#{b{"net_id"}}</td>
 <td>#{b{"effective_date"}}</td>
+<td>#{e{"status_code"} || ""}</td>
 <td>#{a_id}</td>
 </tr>
 >>}).values().join("")}</table>
@@ -180,7 +182,7 @@ latest events.<br/>
         h = e{"event_header"}
         b = e{"event_body"}
         id = h{"event_id"}
-        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}},#{b{"net_id"}},#{b{"effective_date"}}>>
+        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}},#{b{"net_id"}},#{b{"effective_date"}},#{e{"status_code"}||""}>>
       }
       lines = ent:hr_events.values().map(one_line).join(chr(10))
       th + chr(10) + lines
@@ -405,6 +407,17 @@ input.wide90 {
       })
     fired {
       raise edu_byu_hr_hired event "account_requested" attributes event:attrs
+    }
+  }
+  rule acceptReportFromAbsorb {
+    select when edu_byu_hr_hired absorb_response
+      event_id re#(.+)# setting(event_id)
+    pre {
+      status_code = event:attrs{["response","status_code"]}
+    }
+    if ent:hr_events >< event_id then noop()
+    fired {
+      ent:hr_events{["event_id","status_code"]} := status_code
     }
   }
 }
