@@ -81,10 +81,6 @@ Prune keeping
 latest events.<br/>
 <button type="submit" disabled>prune</button>
 </form>
-<ol>
-#{ent:hr_events.keys().map(function(k){
-  <<<li>#{k}</li>
->>}).join("")}<\ol>
 >>
       + html:footer()
     }
