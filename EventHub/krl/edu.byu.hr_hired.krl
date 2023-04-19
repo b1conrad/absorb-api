@@ -401,7 +401,7 @@ input.wide90 {
         "eci":eci,
         "domain":"absorb_api_test",
         "type":"account_requested",
-        "attrs":nua
+        "attrs":nua.put("event_id",event_id)
       })
     fired {
       raise edu_byu_hr_hired event "account_requested" attributes event:attrs

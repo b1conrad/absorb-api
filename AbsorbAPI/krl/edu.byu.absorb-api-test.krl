@@ -2,6 +2,7 @@ ruleset edu.byu.absorb-api-test {
   meta {
     use module io.picolabs.wrangler alias wrangler
     use module com.absorb.sdk alias absorb
+    use module io.picolabs.subscription alias rel
     shares tokenValid, getDepartments, getUsers, getDepartmentById
   }
   global {
@@ -119,6 +120,7 @@ ruleset edu.byu.absorb-api-test {
     if obj then absorb:users_upload(obj) setting(response)
     fired {
       raise absorb_api_test event "account_updated" attributes response
+        .put("event_id",event:attrs{"event_id"})
     }
   }
   rule createAccount {
@@ -141,6 +143,20 @@ ruleset edu.byu.absorb-api-test {
     if obj then absorb:users_upload(obj) setting(response)
     fired {
       raise absorb_api_test event "account_created" attributes response
+        .put("event_id",event:attrs{"event_id"})
     }
+  }
+  rule reportBack {
+    select when absorb_api_test account_created
+             or absorb_api_test account_updated
+    pre {
+      eci = rel:established("Rx_role","outflow").head(){"Tx"}
+      event_id = event:attrs{"event_id"}
+      response = event:attrs.delete("event_id")
+    }
+    if eci && event_id then
+      event:send({"eci":eci,"domain":"edu_byu_hr_hired","type":"absorb_response",
+       "attrs":{"event_id":event_id,"response":response}
+     })
   }
 }
