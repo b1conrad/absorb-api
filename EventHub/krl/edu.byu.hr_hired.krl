@@ -56,6 +56,7 @@ ruleset edu.byu.hr_hired {
 </tr>
 #{ent:hr_events.values().reverse().map(function(e,i){
   h = e{"event_header"}
+  event_dt = h{"event_dt"}//.makeMT().ts_format()
   b = e{"event_body"}
   id = h{"event_id"}
   pid = b{"byu_id"}
@@ -65,7 +66,7 @@ ruleset edu.byu.hr_hired {
 <<<tr>
 <td>#{last-i}</td>
 <td title="#{id}">#{id.substr(0,7)}…</td>
-<td>#{h{"event_dt"}.makeMT().ts_format()}</td>
+<td>#{event_dt}</td>
 <td>#{dept_id}</td>
 <td><a href="#{url}" target="_blank">#{pid}</a></td>
 <td>#{b{"net_id"}}</td>
@@ -180,9 +181,10 @@ latest events.<br/>
       th = "event_id,event_dt,dept_id,byu_id,net_id,eff_dt"
       one_line = function(e,i){
         h = e{"event_header"}
+        event_dt = h{"event_dt"}//.makeMT().ts_format()
         b = e{"event_body"}
         id = h{"event_id"}
-        <<#{id},#{h{"event_dt"}.makeMT().ts_format()},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}},#{b{"net_id"}},#{b{"effective_date"}},#{e{"status_code"}||""}>>
+        <<#{id},#{event_dt},#{e{["filters","filter","filter_value"]}},#{b{"byu_id"}},#{b{"net_id"}},#{b{"effective_date"}},#{e{"status_code"}||""}>>
       }
       lines = ent:hr_events.values().map(one_line).join(chr(10))
       th + chr(10) + lines
