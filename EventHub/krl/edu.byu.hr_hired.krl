@@ -414,6 +414,7 @@ input.wide90 {
   rule acceptReportFromAbsorb {
     select when edu_byu_hr_hired absorb_response
       event_id re#(.+)# setting(event_id)
+/*
     pre {
       status_code = event:attrs{["response","status_code"]}
     }
@@ -421,5 +422,6 @@ input.wide90 {
     fired {
       ent:hr_events{["event_id","status_code"]} := status_code
     }
+*/
   }
 }
