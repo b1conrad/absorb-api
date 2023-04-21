@@ -4,7 +4,7 @@ ruleset edu.byu.hr_hired {
     use module io.picolabs.wrangler alias wrangler
     use module io.picolabs.subscription alias rel
     use module edu.byu.sdk alias sdk
-    shares eh_subscriptions, eh_events, index, export, person, import
+    shares eh_subscriptions, eh_events, index, export //, person, import
 , getNewUserAccount
 , getExistingUserAccount
 , getPerson
@@ -60,7 +60,6 @@ ruleset edu.byu.hr_hired {
   b = e{"event_body"}
   id = h{"event_id"}
   pid = b{"byu_id"}
-  url = "person.html?event_id="+id
   dept_id = e{["filters","filter","filter_value"]}
   a_id = ent:doi >< dept_id => ent:doi{dept_id}.encode() | ""
 <<<tr>
@@ -68,7 +67,7 @@ ruleset edu.byu.hr_hired {
 <td title="#{id}">#{id.substr(0,7)}…</td>
 <td>#{event_dt => event_dt.makeMT().ts_format() | ""}</td>
 <td>#{dept_id}</td>
-<td><a href="#{url}" target="_blank">#{pid}</a></td>
+<td>#{pid}</td>
 <td>#{b{"net_id"}}</td>
 <td>#{b{"effective_date"}}</td>
 <td>#{e{"status_code"} || ""}</td>
