@@ -3,7 +3,7 @@ playing around to learn the Absorb API
 
 ## Rationale
 
-Story [STRY0078158](https://byu.service-now.com/rm_story.do?sys_id=d3ea67611b32d510f954a8aa234bcb56) asks
+Story STRY0078158 asks
 >Absorb is the Employee Learning Management System  (Y-Train).  Real-time account setup is needed for new employees.
 >
 >Can we use Informatica Cloud to listed for employee events and then set up that using IICS?
