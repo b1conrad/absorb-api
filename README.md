@@ -1,4 +1,4 @@
-# b1conrad-absorb-api
+# absorb-api
 playing around to learn the Absorb API
 
 ## Rationale
@@ -42,8 +42,7 @@ Upon receiving the `Hired` event for someone not yet in the Absorb system, we wi
 We will depend on the existing batch (early weekday mornings) to "true up" or reconcile.
 This will also take care of removing accounts for terminated employees, so we will ignore the `Terminated` events.
 
-The [exact departments and their codes](https://docs.google.com/spreadsheets/d/1uL1bRX6fhDyX1_V8XuHj9cme11fArdkgnIg_h9YH--Y/edit?usp=sharing)
-are available.
+The exact departments and their codes are available upon request.
 
 As of today, February 14, 2023 at 14:00 we are beta testing the complete proof of concept for selected departments.
 
@@ -51,4 +50,6 @@ As of today, February 14, 2023 at 14:00 we are beta testing the complete proof o
 
 See slide deck [IICS Absorb updater](https://docs.google.com/presentation/d/1lcHs1FLFqN0vCFG_eXpFHKJ-VFlvLoAyx5CT4ph1mWM/edit?usp=sharing).
 
-Non-person ID is 617556178 with Net-ID b4cf28d2.
+### Repo
+
+[https://github.com/b1conrad/absorb-api](https://github.com/b1conrad/absorb-api)
